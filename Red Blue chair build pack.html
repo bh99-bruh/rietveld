@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Red Blue chair build pack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#ffffff; --field:#ecebe8; --ink:#000000; --mute:#5e5e5a; --rule:#000000;
+  --red:#c8171e; --blue:#1d3c93; --yellow:#f3c300; --line:#d4d3cf;
+  --bar:6px;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light dark;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){ --field:#1f1f1d; --ink:#f4f4f0; --mute:#a7a7a0; --rule:#000000; --line:#3a3a36; }
+}
+:root[data-theme="dark"]{ --field:#1f1f1d; --ink:#f4f4f0; --mute:#a7a7a0; --rule:#000000; --line:#3a3a36; }
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--field);color:var(--ink);font-family:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:15px;line-height:1.5;font-variation-settings:"wdth" 100}
+h1,h2,h3{font-variation-settings:"wdth" 125;font-weight:850;letter-spacing:-.01em;line-height:1.05;margin:0}
+h1{font-size:clamp(28px,4.2vw,50px)}
+h2{font-size:clamp(22px,2.6vw,30px);margin-bottom:.6em}
+h3{font-size:18px;margin-bottom:.35em}
+p{margin:.3em 0 .8em;max-width:70ch}
+a{color:inherit}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
+
+/* ---- Mondrian chrome: thick black bars as structure ---- */
+.top{display:grid;grid-template-columns:auto 1fr;background:var(--rule);gap:var(--bar);border-bottom:var(--bar) solid var(--rule)}
+.brand{background:var(--paper);color:#000;padding:18px 22px 16px;display:flex;align-items:flex-end;gap:18px}
+.mark{display:grid;grid-template-columns:22px 10px;grid-template-rows:22px 10px;gap:4px;background:#000;padding:4px;flex:none}
+.mark i:nth-child(1){background:var(--red)}.mark i:nth-child(2){background:#fff}.mark i:nth-child(3){background:var(--blue)}.mark i:nth-child(4){background:var(--yellow)}
+.brand p{margin:4px 0 0;color:#444;font-size:14px;max-width:46ch}
+nav.tabs{display:flex;gap:var(--bar);background:var(--rule)}
+nav.tabs button{flex:1;border:0;background:var(--paper);color:#000;padding:14px 16px;text-align:left;cursor:pointer;display:flex;flex-direction:column;justify-content:flex-end;min-width:0;font-variation-settings:"wdth" 112;font-weight:750;font-size:17px;position:relative}
+nav.tabs button small{font-weight:400;font-size:12.5px;color:#555;font-variation-settings:"wdth" 100}
+nav.tabs button[aria-selected="true"]{background:var(--c,#f3c300);color:#fff}
+nav.tabs button[aria-selected="true"] small{color:rgba(255,255,255,.85)}
+nav.tabs button[data-tab="parts"]{--c:var(--blue)}nav.tabs button[data-tab="chair"]{--c:#000}
+nav.tabs button[data-tab="drill"]{--c:var(--red)}nav.tabs button[data-tab="build"]{--c:var(--yellow)}
+nav.tabs button[data-tab="build"][aria-selected="true"]{color:#000}nav.tabs button[data-tab="build"][aria-selected="true"] small{color:#333}
+
+.layout{display:grid;grid-template-columns:318px 1fr;gap:var(--bar);background:var(--rule);min-height:calc(100vh - 110px)}
+.panel{background:var(--paper);color:#000;padding:18px 20px 26px}
+.main{background:var(--field);min-width:0}
+.panel fieldset{border:0;margin:0 0 14px;padding:0}
+.panel legend{font-weight:750;font-variation-settings:"wdth" 112;padding:0;margin-bottom:6px;font-size:15px}
+.field{margin:0 0 12px}
+.field label{display:flex;justify-content:space-between;gap:8px;font-size:13.5px}
+.field label output{font-variant-numeric:tabular-nums;font-weight:700}
+.field .hint{font-size:12px;color:#666;margin-top:1px}
+input[type=range]{width:100%;accent-color:#000;margin:4px 0 0}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+select,.num{width:100%;padding:6px 8px;border:2px solid #000;background:#fff;color:#000;border-radius:0}
+.check{display:flex;gap:8px;align-items:flex-start;font-size:13.5px;margin:6px 0 12px}
+.check input{margin-top:3px;accent-color:#000}
+.presets{display:flex;gap:6px;margin:4px 0 16px;flex-wrap:wrap}
+.presets button{border:2px solid #000;background:#fff;color:#000;padding:6px 10px;cursor:pointer;font-weight:650;font-size:13px}
+.presets button:hover{background:var(--yellow)}
+.readout{border-top:var(--bar) solid #000;margin:6px -20px 0;padding:14px 20px 0}
+.readout dl{display:grid;grid-template-columns:1fr auto;gap:3px 12px;margin:0;font-size:13.5px}
+.readout dt{color:#444}.readout dd{margin:0;font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
+.delta{font-size:12.5px;color:#444;margin-top:10px}
+.msg{padding:9px 11px;margin:10px 0 0;font-size:13px;border-left:6px solid var(--red);background:#fdf0f0;color:#000}
+.msg.warn{border-color:var(--yellow);background:#fdf8e4}
+
+.tab{display:none}.tab.on{display:block}
+.pad{padding:22px 26px 40px}
+.viewer{position:relative;height:min(78vh,760px);background:#f6f6f4}
+.viewer canvas{display:block;width:100%;height:100%;touch-action:none}
+.vtools{position:absolute;left:14px;bottom:14px;display:flex;gap:6px;flex-wrap:wrap}
+.vtools label,.vtools button{background:#fff;color:#000;border:2px solid #000;padding:5px 10px;font-size:13px;display:flex;gap:6px;align-items:center;cursor:pointer;font-weight:600}
+.vtools input{accent-color:#000;margin:0}
+.legend3d{position:absolute;right:14px;top:14px;background:#fff;color:#000;border:2px solid #000;padding:8px 12px;font-size:12.5px;max-width:250px}
+.legend3d i{display:inline-block;width:11px;height:11px;margin-right:6px;vertical-align:-1px;border:1px solid #000}
+
+.sheet{background:var(--paper);color:#000;border:2px solid #000;padding:20px 22px;margin:0 0 20px;break-inside:avoid}
+.sheet .head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+.sheet .tag{display:inline-grid;place-items:center;min-width:34px;height:34px;padding:0 6px;background:#000;color:#fff;font-weight:850;font-variation-settings:"wdth" 125;font-size:18px;margin-right:10px}
+.sheet .tag.k{background:var(--blue)}.sheet .tag.l{background:var(--red)}
+.sheet .sub{color:#444;font-size:13.5px}
+.scroll{overflow-x:auto;max-width:100%}
+table{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:6px 10px 6px 0;border-bottom:1px solid #d6d6d2;vertical-align:top}
+th{font-weight:700;border-bottom:2px solid #000;font-variation-settings:"wdth" 108}
+td.n,th.n{text-align:right}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px}
+.ctrls{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;margin-bottom:16px}
+.ctrls .field{margin:0;min-width:130px}
+.ctrls .field label{margin-bottom:3px}
+.printbtn{border:2px solid #000;background:#000;color:#fff;padding:8px 14px;font-weight:700;cursor:pointer}
+.printbtn:hover{background:var(--red)}
+svg text{font-family:"Archivo",system-ui,sans-serif}
+.note{font-size:13.5px;color:#333}
+.tips{columns:2 300px;column-gap:28px;font-size:14px}
+.tips li{margin:0 0 8px;break-inside:avoid}
+
+/* ---- assembly manual: IKEA-ish, line art, big numbers ---- */
+.steps{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,440px),1fr));gap:20px}
+.step{background:#fff;color:#000;border:2px solid #000;padding:14px 16px 16px;display:flex;flex-direction:column;break-inside:avoid;position:relative}
+.step .snum{font-size:64px;font-weight:900;font-variation-settings:"wdth" 62;line-height:.9;position:absolute;left:16px;top:12px}
+.step img{width:100%;height:auto;display:block;aspect-ratio:10/7;background:#fff}
+.step .kit{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;min-height:58px;padding-left:64px}
+.step .kit .it{display:flex;flex-direction:column;align-items:center;font-size:12px;border:1.5px solid #000;padding:4px 8px 3px;min-width:58px}
+.step .kit .it b{font-size:15px}
+.step .cap{font-size:14px;margin-top:6px;max-width:60ch}
+.step .icons{display:flex;gap:8px;justify-content:flex-end;margin-top:-8px}
+.inv{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.inv .p{border:1.5px solid #000;padding:6px 8px;display:flex;flex-direction:column;background:#fff}
+.inv .p img{width:100%;aspect-ratio:3/2;object-fit:contain}
+.inv .p span{display:flex;justify-content:space-between;font-weight:800;font-size:16px}
+.inv .p small{font-size:11.5px;color:#444}
+.empty{padding:40px;text-align:center;color:var(--mute)}
+
+@media (max-width:900px){
+  .top{grid-template-columns:1fr}
+  nav.tabs{overflow-x:auto}
+  nav.tabs button{min-width:130px}
+  .layout{grid-template-columns:1fr}
+  .viewer{height:62vh}
+  .pad{padding:16px 14px 30px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{
+  :root{--field:#fff}
+  body{background:#fff}
+  .top nav,.panel,.vtools,.ctrls,.printbtn,.noprint{display:none!important}
+  .top{display:block;border:0}
+  .layout{display:block;background:#fff}
+  .sheet,.step{border-width:1px;page-break-inside:avoid}
+  .steps{grid-template-columns:1fr 1fr}
+  .viewer{height:600px}
+  .pad{padding:0}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <div class="mark" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <div>
+      <h1>Red Blue chair</h1>
+      <p>Set the size on the left. The 3D model, cut list, drilling drawings and assembly steps all follow it.</p>
+    </div>
+  </div>
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="chair" aria-selected="true">Chair<small>3D view and size</small></button>
+    <button role="tab" data-tab="parts" aria-selected="false">Parts<small>Cut list and shopping</small></button>
+    <button role="tab" data-tab="drill" aria-selected="false">Drilling<small>Where every hole goes</small></button>
+    <button role="tab" data-tab="build" aria-selected="false">Assembly<small>Step by step</small></button>
+  </nav>
+</header>
+
+<div class="layout">
+  <aside class="panel" id="panel">
+    <div class="presets">
+      <button data-preset="first">Your first chair</button>
+      <button data-preset="roomy">Roomier</button>
+      <button data-preset="big">Big and tall</button>
+    </div>
+    <fieldset>
+      <legend>Size</legend>
+      <div class="field"><label for="seatW">Seat width between the front legs <output id="o_seatW"></output></label>
+        <input type="range" id="seatW" min="340" max="620" step="5"><div class="hint">First chair: 420 mm. Comfortable: 460 to 500.</div></div>
+      <div class="field"><label for="seatH">Seat height at the front edge <output id="o_seatH"></output></label>
+        <input type="range" id="seatH" min="290" max="470" step="5"><div class="hint">First chair: 341 mm. Lounge chairs sit around 380 to 420.</div></div>
+      <div class="field"><label for="depth">Extra seat depth <output id="o_depth"></output></label>
+        <input type="range" id="depth" min="-40" max="140" step="5"><div class="hint">Moves the front legs forward. Add some for longer legs.</div></div>
+      <div class="field"><label for="lean">Back lean from vertical <output id="o_lean"></output></label>
+        <input type="range" id="lean" min="15" max="40" step="0.5"></div>
+      <div class="field"><label for="backX">Longer back board <output id="o_backX"></output></label>
+        <input type="range" id="backX" min="-150" max="200" step="5"><div class="hint">0 keeps the backrest height above the seat of the original.</div></div>
+    </fieldset>
+    <fieldset>
+      <legend>Material</legend>
+      <div class="field"><label for="slat">Slat section (square) <output id="o_slat"></output></label>
+        <input type="range" id="slat" min="22" max="45" step="1"><div class="hint">Arms are three slats wide. Joints and overhangs keep their ratios.</div></div>
+      <label class="check"><input type="checkbox" id="prop"> <span>Scale the whole chair with the slat, so thicker stock gives a proportionally larger chair</span></label>
+      <div class="row2">
+        <div class="field"><label for="board">Board thickness</label>
+          <select id="board"><option value="12">12 mm</option><option value="15">15 mm</option><option value="18">18 mm</option></select></div>
+        <div class="field"><label for="dowel">Dowels</label>
+          <select id="dowel"><option value="">Auto</option><option value="6">6 × 30</option><option value="8">8 × 40</option><option value="10">10 × 50</option></select></div>
+      </div>
+    </fieldset>
+    <div class="readout">
+      <dl id="readout"></dl>
+      <div class="delta" id="delta"></div>
+      <div id="msgs"></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <section class="tab on" id="tab-chair">
+      <div class="viewer" id="viewer">
+        <div class="legend3d"><i style="background:#111"></i>Slats, <i style="background:var(--yellow)"></i>end grain<br><i style="background:var(--blue)"></i>Seat K, <i style="background:var(--red)"></i>Back L
+          <br><span id="ghostkey" style="display:none"><i style="background:transparent;border-color:#e0522c;border-style:dashed"></i>Your first chair</span></div>
+        <div class="vtools">
+          <label><input type="checkbox" id="xray"> X-ray: show dowels and screws</label>
+          <label><input type="checkbox" id="ghost" checked> Compare with your first chair</label>
+          <button id="resetView">Reset view</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab" id="tab-parts"><div class="pad" id="partsOut"></div></section>
+    <section class="tab" id="tab-drill"><div class="pad" id="drillOut"></div></section>
+    <section class="tab" id="tab-build"><div class="pad" id="buildOut"></div></section>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+// ---- Rietveld chair model (JS port of rietveld_chair_parametric_v2.FCMacro) ----
+const ORIG = {SEAT_WIDTH: 420, Y_RUN: 74, Y_SR: 228, Y_FH: 309, Y_ARM: 484, SEAT_SPAN: 327, ARM_FRONT: 235, BACK_TOP: 659.7};
+const DEFAULTS = {SLAT: 30, PROPORTIONAL: false, WIDTH_EXTRA: 0, SEAT_LIFT: 0, DEPTH_EXTRA: 0, BACK_LEAN: 27, BACK_EXTRA: 0, BOARD_THICK: 15, DOWEL_DIAMETER: null, DOWEL_LENGTH: null};
+const PART_INFO = {
+  A: {name: 'Runner', verb: 'rear end'}, B: {name: 'Front leg', verb: 'bottom end'}, C: {name: 'Mid post', verb: 'bottom end'},
+  D: {name: 'Rear post', verb: 'bottom end'}, E: {name: 'Rail front low', verb: 'left end'}, F: {name: 'Rail front high', verb: 'left end'},
+  G: {name: 'Rail rear low', verb: 'left end'}, H: {name: 'Rail seat rear', verb: 'left end'}, I: {name: 'Rail rear top', verb: 'left end'},
+  J: {name: 'Arm', verb: 'rear end'}
+};
+
+function stdDowel(S) {
+  const opts = [6, 8, 10, 12];
+  let best = opts[0];
+  for (const v of opts) if (Math.abs(v - S * 0.27) < Math.abs(best - S * 0.27)) best = v;
+  return [best, {6: 30, 8: 40, 10: 50, 12: 60}[best]];
+}
+
+function segDist(p1, q1, p2, q2) {
+  const d1 = [0, 1, 2].map(i => q1[i] - p1[i]), d2 = [0, 1, 2].map(i => q2[i] - p2[i]), r = [0, 1, 2].map(i => p1[i] - p2[i]);
+  const dot = (u, v) => u[0] * v[0] + u[1] * v[1] + u[2] * v[2];
+  const cl = v => v < 0 ? 0 : (v > 1 ? 1 : v);
+  const a = dot(d1, d1), e = dot(d2, d2), f = dot(d2, r), eps = 1e-9;
+  let s, t;
+  if (a <= eps && e <= eps) return Math.sqrt(dot(r, r));
+  if (a <= eps) { s = 0; t = cl(f / e); }
+  else {
+    const c = dot(d1, r);
+    if (e <= eps) { t = 0; s = cl(-c / a); }
+    else {
+      const b = dot(d1, d2), den = a * e - b * b;
+      s = den > eps ? cl((b * f - c * e) / den) : 0;
+      t = (b * s + f) / e;
+      if (t < 0) { t = 0; s = cl(-c / a); }
+      else if (t > 1) { t = 1; s = cl((b - c) / a); }
+    }
+  }
+  const w = [0, 1, 2].map(i => p1[i] + d1[i] * s - p2[i] - d2[i] * t);
+  return Math.sqrt(dot(w, w));
+}
+
+function mirrorIdx(slats, i) {
+  const nm = slats[i].name;
+  let t;
+  if (nm.endsWith(' R')) t = nm.slice(0, -2) + ' L';
+  else if (nm.endsWith(' L')) t = nm.slice(0, -2) + ' R';
+  else return i;
+  const j = slats.findIndex(s => s.name === t);
+  return j < 0 ? i : j;
+}
+
+function buildChair(P) {
+  const S = +P.SLAT, k = S / 30, E = P.PROPORTIONAL ? k : 1;
+  const L = +P.SEAT_LIFT, D = +P.DEPTH_EXTRA, T = +P.BOARD_THICK;
+  const a = P.BACK_LEAN * Math.PI / 180;
+  const [dd, dl0] = stdDowel(S);
+  const DIA = +(P.DOWEL_DIAMETER || dd);
+  const DLEN = +(P.DOWEL_LENGTH || (P.DOWEL_DIAMETER ? {6: 30, 8: 40, 10: 50, 12: 60}[P.DOWEL_DIAMETER] : dl0));
+  const R = DIA / 2, h = DLEN / 2;
+  const errors = [], warnings = [];
+
+  const SW = ORIG.SEAT_WIDTH * E + +P.WIDTH_EXTRA;
+  const y_run = ORIG.Y_RUN * E, Y_LOW = y_run + 2 * S;
+  const Y_SR = ORIG.Y_SR * E + L, Y_FH = ORIG.Y_FH * E + L, Y_ARM = ORIG.Y_ARM * E + L;
+  const zf = 2 * S + ORIG.SEAT_SPAN * E + D;
+  const z_t = -(Y_ARM - Y_LOW) * Math.tan(a);
+  const hs = SW / 2, W = SW + 6 * S;
+
+  const slats = [];
+  const add = (key, name, x0, x1, y0, y1, z0, z1) => slats.push({key, name, box: [x0, x1, y0, y1, z0, z1]});
+  const pair = (key, name, xa, xb, y0, y1, z0, z1) => { add(key, name + ' L', -xb, -xa, y0, y1, z0, z1); add(key, name + ' R', xa, xb, y0, y1, z0, z1); };
+
+  const m = (Y_FH - Y_SR) / (zf - S), th = Math.atan(m);
+  const yu = z => Y_SR + m * (z - S);
+  const leg_top = yu(zf + S) + T / Math.cos(th) - 2 * k;
+
+  pair('A', 'Runner', hs - S, hs, y_run, y_run + S, z_t - S - 8 * k, zf + 2 * S + 35 * k);
+  pair('B', 'Front leg', hs, hs + S, 0, leg_top, zf + S, zf + 2 * S);
+  pair('C', 'Mid post', hs, hs + S, y_run - 20 * k, Y_ARM, 0, S);
+  pair('D', 'Rear post', hs, hs + S, 0, Y_ARM, z_t, z_t + S);
+  add('E', 'Rail front low', -W / 2, W / 2, Y_LOW - S, Y_LOW, zf, zf + S);
+  add('F', 'Rail front high', -W / 2, W / 2, Y_FH - S, Y_FH, zf, zf + S);
+  add('G', 'Rail rear low', -W / 2, W / 2, Y_LOW - S, Y_LOW, -S, 0);
+  add('H', 'Rail seat rear', -W / 2, W / 2, Y_SR - S, Y_SR, S, 2 * S);
+  add('I', 'Rail rear top', -W / 2, W / 2, Y_ARM - S, Y_ARM, z_t - S, z_t);
+  pair('J', 'Arm', hs - S, hs + 2 * S, Y_ARM, Y_ARM + S, z_t - S - 25 * k, ORIG.ARM_FRONT * E + D);
+
+  const z_rear = S - 19.64 * k, z_front = zf + 2 * S + 11.68 * k;
+  const hr = hs - 25 * k, hf = hs - 1;
+  const seat_under = [[-hr, yu(z_rear), z_rear], [hr, yu(z_rear), z_rear], [hf, yu(z_front), z_front], [-hf, yu(z_front), z_front]];
+  const seat_n = [0, Math.cos(th), -Math.sin(th)];
+  const seat_len = (z_front - z_rear) / Math.cos(th);
+
+  const yb = Y_LOW - 55 * k;
+  const zr = y => -(y - Y_LOW) * Math.tan(a);
+  const B0 = [yb, zr(yb)];
+  const A0 = [yb + T * Math.sin(a), B0[1] + T * Math.cos(a)];
+  const blen = (Y_SR + ORIG.BACK_TOP * E - yb - T * Math.sin(a)) / Math.cos(a) + +P.BACK_EXTRA;
+  const dv = [Math.cos(a), -Math.sin(a)];
+  const C0 = [B0[0] + blen * dv[0], B0[1] + blen * dv[1]];
+  const D0 = [A0[0] + blen * dv[0], A0[1] + blen * dv[1]];
+  const hb = hs - S - 1;
+  const back_side = [[-hb, B0[0], B0[1]], [-hb, A0[0], A0[1]], [-hb, D0[0], D0[1]], [-hb, C0[0], C0[1]]];
+  const zfb = y => zr(y) + T / Math.cos(a);
+
+  if (S < 20 || S > 50) errors.push('Slat size must be between 20 and 50 mm.');
+  if (SW < 300) errors.push('Seat width is below 300 mm. Make it wider.');
+  if (h + 2 > S - 5) errors.push('The dowels are too long for this slat. Pick a smaller dowel.');
+  if (Y_FH - S < Y_LOW + DIA + 4) errors.push('The front high rail runs into the front low rail. Raise the seat.');
+  if (z_t + S > -S - 5) errors.push('The rear posts run into the rear low rail. Lean the back further.');
+  if (zfb(Y_SR - S) > S - 2) errors.push('The back board hits the seat-rear rail. Lean the back further.');
+  if (zfb(yu(z_rear)) > z_rear - 2) errors.push('The back board hits the seat. Lean the back further.');
+  if (yb < 5) errors.push('The back board reaches the floor.');
+  if (th < 3 * Math.PI / 180) warnings.push('The seat is almost flat; the Rietveld seat normally tilts 10 to 15 degrees.');
+  if (P.BACK_LEAN < 15 || P.BACK_LEAN > 40) warnings.push('A back lean outside 15 to 40 degrees will feel odd.');
+
+  const contacts = [];
+  for (let i = 0; i < slats.length; i++) for (let j = i + 1; j < slats.length; j++) {
+    const A = slats[i].box, B = slats[j].box;
+    const o = [0, 1, 2].map(q => Math.min(A[2 * q + 1], B[2 * q + 1]) - Math.max(A[2 * q], B[2 * q]));
+    const zz = [0, 1, 2].filter(q => Math.abs(o[q]) < 1e-6), pp = [0, 1, 2].filter(q => o[q] > 1e-6);
+    if (zz.length === 1 && pp.length === 2) {
+      const ax = zz[0];
+      const plane = Math.abs(A[2 * ax + 1] - B[2 * ax]) < 1e-6 ? A[2 * ax + 1] : B[2 * ax + 1];
+      const rng = {};
+      for (const q of pp) rng[q] = [Math.max(A[2 * q], B[2 * q]), Math.min(A[2 * q + 1], B[2 * q + 1])];
+      const cx = (0 in rng) ? (rng[0][0] + rng[0][1]) / 2 : plane;
+      if (cx <= 0) continue;
+      const ka = slats[i].key, kb = slats[j].key;
+      let through = null;
+      if (ka === 'A' && 'EG'.includes(kb)) through = i; else if (kb === 'A' && 'EG'.includes(ka)) through = j;
+      contacts.push({a: i, b: j, ax, plane, rng, through});
+    }
+  }
+  const lim = S / 2 - R - 3, dl = Math.max(0, lim) / 2;
+  const offs = [0, -dl, dl, -2 * dl, 2 * dl];
+  const dow = [];
+  for (const c of contacts) {
+    const fr = Object.keys(c.rng).map(Number).sort();
+    const cen = fr.map(q => (c.rng[q][0] + c.rng[q][1]) / 2), wid = fr.map(q => c.rng[q][1] - c.rng[q][0]);
+    let nom = [cen.slice()];
+    if (Math.max(...wid) > 1.5 * S) {
+      const w = wid.indexOf(Math.max(...wid));
+      const n1 = cen.slice(), n2 = cen.slice(); n1[w] -= S; n2[w] += S; nom = [n1, n2];
+    }
+    for (const nc of nom) {
+      const cands = [];
+      for (const o0 of offs) for (const o1 of offs) {
+        const p = [nc[0] + o0, nc[1] + o1];
+        const ok = fr.every((q, ii) => c.rng[q][0] + R + 3 - 1e-9 <= p[ii] && p[ii] <= c.rng[q][1] - R - 3 + 1e-9);
+        if (ok) cands.push([o0 * o0 + o1 * o1, Math.abs(o0) + Math.abs(o1), p]);
+      }
+      // stable sort identical to python's sort by (t1, t0)
+      cands.sort((u, v) => (u[1] - v[1]) || (u[0] - v[0]));
+      const segs = cands.map(([cost, , p]) => {
+        const p0 = [0, 0, 0], p1 = [0, 0, 0];
+        fr.forEach((q, ii) => { p0[q] = p1[q] = p[ii]; });
+        let lo = c.plane - h, hi = c.plane + h;
+        if (c.through !== null) {
+          const tb = slats[c.through].box;
+          if (tb[2 * c.ax] < c.plane - 1e-6) lo = tb[2 * c.ax]; else hi = tb[2 * c.ax + 1];
+        }
+        p0[c.ax] = lo; p1[c.ax] = hi;
+        return [cost, p0, p1];
+      });
+      dow.push({c, cands: segs});
+    }
+  }
+  const n = dow.length, need = DIA + 1;
+  const par = [...Array(n).keys()];
+  const find = x => { while (par[x] !== x) x = par[x]; return x; };
+  const reach = 2 * dl * Math.SQRT2 * 2 + need + 1;
+  for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++)
+    if (segDist(dow[i].cands[0][1], dow[i].cands[0][2], dow[j].cands[0][1], dow[j].cands[0][2]) < reach) par[find(i)] = find(j);
+  const comps = {};
+  for (let i = 0; i < n; i++) (comps[find(i)] = comps[find(i)] || []).push(i);
+  const choice = new Array(n).fill(0);
+  let unresolved = 0;
+  for (const root of Object.keys(comps).map(Number).sort((x, y) => x - y)) {
+    const idx = comps[root];
+    if (idx.length === 1) continue;
+    let best = null, bestc = 1e18, total = 1;
+    for (const i of idx) total *= dow[i].cands.length;
+    if (total <= 400000) {
+      const sel = new Array(idx.length).fill(0);
+      const rec = (pos, cost) => {
+        if (cost >= bestc) return;
+        if (pos === idx.length) { best = sel.slice(); bestc = cost; return; }
+        const di = idx[pos];
+        dow[di].cands.forEach(([cc, p0, p1], ci) => {
+          for (let q = 0; q < pos; q++) {
+            const [, a0, a1] = dow[idx[q]].cands[sel[q]];
+            if (segDist(p0, p1, a0, a1) < need) return;
+          }
+          sel[pos] = ci; rec(pos + 1, cost + cc);
+        });
+      };
+      rec(0, 0);
+    }
+    if (best === null) unresolved++; else idx.forEach((i, q) => { choice[i] = best[q]; });
+  }
+  if (unresolved) warnings.push(unresolved + ' dowel group(s) could not be separated. Check the drawings.');
+
+  const dowels = [];
+  dow.forEach((dw, i) => {
+    const [, p0, p1] = dw.cands[choice[i]], c = dw.c;
+    for (const sgn of [1, -1]) {
+      let ia = c.a, ib = c.b, thr = c.through;
+      if (sgn < 0) { ia = mirrorIdx(slats, ia); ib = mirrorIdx(slats, ib); if (thr !== null) thr = mirrorIdx(slats, thr); }
+      dowels.push({a: ia, b: ib, ax: c.ax, plane: c.plane, p0: [sgn * p0[0], p0[1], p0[2]], p1: [sgn * p1[0], p1[1], p1[2]], through: thr});
+    }
+  });
+
+  const screws = [];
+  const sx = hs - 50 * k;
+  for (const zc of [S + S / 3, zf + S / 3]) for (const sg of [-1, 1])
+    screws.push({board: 'K', x: sg * sx, along: (zc - z_rear) / Math.cos(th), p: [sg * sx, yu(zc) + T / Math.cos(th), zc], n: seat_n});
+  const bx = hb - 45 * k;
+  for (const [yc] of [[Y_LOW], [Y_ARM]]) {
+    const t = -S / 6 * Math.cos(a);
+    const along = (yc - yb) / Math.cos(a) + t;
+    for (const sg of [-1, 1]) {
+      const yy = yb + along * Math.cos(a), zz = B0[1] - along * Math.sin(a);
+      screws.push({board: 'L', x: sg * bx, along, p: [sg * bx, yy + T * Math.sin(a), zz + T * Math.cos(a)], n: [0, Math.sin(a), Math.cos(a)]});
+    }
+  }
+
+  const zs = slats.flatMap(s => [s.box[4], s.box[5]]);
+  const info = {S, k, E, W, SW, DIA, DLEN, T, lean: P.BACK_LEAN,
+    seat_front_top: yu(z_front) + T / Math.cos(th), seat_rear_top: yu(z_rear) + T / Math.cos(th),
+    seat_angle: th * 180 / Math.PI, seat_len, seat_w_rear: 2 * hr, seat_w_front: 2 * hf,
+    back_len: blen, back_w: 2 * hb, back_top: Math.max(C0[0], D0[0]),
+    depth: Math.max(...zs) - Math.min(...zs), arm_h: Y_ARM + S, zmin: Math.min(...zs), zmax: Math.max(...zs),
+    back_low_contact: (Y_LOW - yb) / Math.cos(a), back_top_contact: (Y_ARM - yb) / Math.cos(a)};
+  const M = {slats, seat_under, seat_n, back_side, back_w: 2 * hb, dowels, screws, info, errors, warnings};
+  M.holes = holeList(M);
+  return M;
+}
+
+function longAxis(box) {
+  const ext = [box[1] - box[0], box[3] - box[2], box[5] - box[4]];
+  return ext.indexOf(Math.max(...ext));
+}
+
+const FACE_NAMES = {'0,1': 'outer', '0,-1': 'inner', '1,1': 'top', '1,-1': 'bottom', '2,1': 'front', '2,-1': 'back'};
+
+function holeList(M) {
+  const holes = [], h = M.info.DLEN / 2;
+  M.dowels.forEach((d, di) => {
+    for (const si of [d.a, d.b]) {
+      const box = M.slats[si].box, ax = d.ax;
+      const sign = box[2 * ax] >= d.plane - 1e-6 ? 1 : -1;
+      const through = d.through === si;
+      const depth = through ? box[2 * ax + 1] - box[2 * ax] : h + 2;
+      const fn = -sign, p = d.p0, la = longAxis(box);
+      const left = box[0] < 0 && box[1] <= 0;
+      const worldFn = (ax === 0 && left) ? -fn : fn;
+      let face = FACE_NAMES[ax + ',' + worldFn];
+      const across = [0, 1, 2].filter(q => q !== ax && q !== la)[0];
+      const offOf = q => q === 0 ? (left ? box[1] - p[0] : p[0] - box[0]) : p[q] - box[2 * q];
+      let hole = {slat: si, dowel: di, ax, sign, through, depth, p, la, key: M.slats[si].key, name: M.slats[si].name};
+      if (ax === la) {
+        face = (ax === 1 && fn > 0) ? 'top end' : (ax === 1 ? 'bottom end' : 'end');
+        const o = [0, 1, 2].filter(q => q !== ax);
+        Object.assign(hole, {face, end: true, u: offOf(o[0]), v: offOf(o[1]), uax: o[0], vax: o[1]});
+      } else {
+        Object.assign(hole, {face, end: false, along: p[la] - box[2 * la], off: offOf(across), across});
+      }
+      holes.push(hole);
+    }
+  });
+  return holes;
+}
+
+
+</script>
+<script>
+// ================= state =================
+const PRESETS = {
+  first: {seatW: 420, seatH: 340, depth: 0, lean: 27, backX: 0, slat: 30, prop: false, board: 15, dowel: ''},
+  roomy: {seatW: 480, seatH: 390, depth: 20, lean: 27, backX: 20, slat: 30, prop: false, board: 15, dowel: ''},
+  big:   {seatW: 520, seatH: 420, depth: 60, lean: 26, backX: 60, slat: 34, prop: false, board: 18, dowel: ''}
+};
+const PARTS_CTRL = {chairs: 2, stock: 2400, kerf: 3, allow: 5, sheetW: 1220, sheetH: 2440};
+let st = Object.assign({}, PRESETS.roomy);
+try { const s = JSON.parse(localStorage.getItem('rietveld-state') || 'null'); if (s && s.seatW) st = Object.assign(st, s); } catch (e) {}
+try { const c = JSON.parse(localStorage.getItem('rietveld-parts') || 'null'); if (c) Object.assign(PARTS_CTRL, c); } catch (e) {}
+
+const FIRST = buildChair(DEFAULTS);
+let M = null;
+
+function toModel(s) {
+  const S = +s.slat, E = s.prop ? S / 30 : 1;
+  const P = Object.assign({}, DEFAULTS, {SLAT: S, PROPORTIONAL: !!s.prop, WIDTH_EXTRA: s.seatW - 420 * E, SEAT_LIFT: 0,
+    DEPTH_EXTRA: +s.depth, BACK_LEAN: +s.lean, BACK_EXTRA: +s.backX, BOARD_THICK: +s.board, DOWEL_DIAMETER: s.dowel ? +s.dowel : null});
+  P.SEAT_LIFT = s.seatH - buildChair(P).info.seat_front_top;
+  return P;
+}
+
+const $ = id => document.getElementById(id);
+const f0 = v => String(Math.round(v));
+const fh = v => { const r = Math.round(v * 2) / 2; return (Math.abs(r - Math.round(r)) < 1e-9 ? Math.round(r) : r.toFixed(1)).toString(); };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+const repIdx = key => { const i = M.slats.findIndex(s => s.key === key && s.name.endsWith(' R')); return i >= 0 ? i : M.slats.findIndex(s => s.key === key); };
+const partName = key => PART_INFO[key] ? PART_INFO[key].name : (key === 'K' ? 'Seat board' : 'Back board');
+const ext = b => [b[1] - b[0], b[3] - b[2], b[5] - b[4]];
+
+// ================= controls =================
+const sliders = {seatW: ' mm', seatH: ' mm', depth: ' mm', lean: '°', backX: ' mm', slat: ' mm'};
+function syncUI() {
+  for (const k of Object.keys(sliders)) { $(k).value = st[k]; $('o_' + k).textContent = (k === 'depth' || k === 'backX') && st[k] > 0 ? '+' + st[k] + sliders[k] : st[k] + sliders[k]; }
+  $('prop').checked = !!st.prop; $('board').value = String(st.board); $('dowel').value = String(st.dowel || '');
+}
+for (const k of Object.keys(sliders)) {
+  $(k).addEventListener('input', e => {
+    const v = +e.target.value;
+    if (k === 'slat' && st.prop) {
+      const r = v / st.slat;
+      st.seatW = Math.round(st.seatW * r / 5) * 5; st.seatH = Math.round(st.seatH * r / 5) * 5;
+      st.depth = Math.round(st.depth * r / 5) * 5; st.backX = Math.round(st.backX * r / 5) * 5;
+    }
+    st[k] = v; changed();
+  });
+}
+$('prop').addEventListener('change', e => { st.prop = e.target.checked; changed(); });
+$('board').addEventListener('change', e => { st.board = +e.target.value; changed(); });
+$('dowel').addEventListener('change', e => { st.dowel = e.target.value; changed(); });
+document.querySelectorAll('[data-preset]').forEach(b => b.addEventListener('click', () => { st = Object.assign({}, PRESETS[b.dataset.preset]); changed(); }));
+
+function readout() {
+  const I = M.info;
+  const rows = [
+    ['Overall W × D × H', `${f0(I.W)} × ${f0(I.depth)} × ${f0(I.back_top)}`],
+    ['Seat width front / rear', `${f0(I.seat_w_front)} / ${f0(I.seat_w_rear)}`],
+    ['Seat height front / rear', `${f0(I.seat_front_top)} / ${f0(I.seat_rear_top)}`],
+    ['Seat tilt', I.seat_angle.toFixed(1) + '°'],
+    ['Arm height', f0(I.arm_h)],
+    ['Back board', `${f0(I.back_len)} × ${f0(I.back_w)}`],
+    ['Dowels per chair', `${M.dowels.length} × Ø${I.DIA}`]
+  ];
+  $('readout').innerHTML = rows.map(r => `<dt>${r[0]}</dt><dd>${r[1]}</dd>`).join('');
+  const F = FIRST.info;
+  const d = (a, b) => (a - b >= 0 ? '+' : '−') + f0(Math.abs(a - b));
+  $('delta').textContent = `Against your first chair: seat ${d(I.seat_w_front, F.seat_w_front)} mm wider, ${d(I.seat_front_top, F.seat_front_top)} mm higher, overall ${d(I.depth, F.depth)} mm deeper. All sizes in mm.`;
+  $('msgs').innerHTML = M.errors.map(e => `<div class="msg">${esc(e)}</div>`).join('') + M.warnings.map(e => `<div class="msg warn">${esc(e)}</div>`).join('');
+}
+
+// ================= 3D viewer =================
+const V = {};
+function init3D() {
+  const host = $('viewer');
+  V.renderer = new THREE.WebGLRenderer({antialias: true});
+  V.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  host.prepend(V.renderer.domElement);
+  V.scene = new THREE.Scene();
+  V.scene.background = new THREE.Color(0xf6f6f4);
+  V.camera = new THREE.PerspectiveCamera(30, 1, 10, 30000);
+  V.controls = new THREE.OrbitControls(V.camera, V.renderer.domElement);
+  V.controls.enableDamping = true; V.controls.dampingFactor = 0.12;
+  V.scene.add(new THREE.HemisphereLight(0xffffff, 0x77776f, 0.8));
+  const d1 = new THREE.DirectionalLight(0xffffff, 0.7); d1.position.set(700, 1400, 1000); V.scene.add(d1);
+  const d2 = new THREE.DirectionalLight(0xffffff, 0.3); d2.position.set(-900, 500, -700); V.scene.add(d2);
+  const floor = new THREE.Mesh(new THREE.CircleGeometry(1400, 64), new THREE.MeshLambertMaterial({color: 0xe7e7e3}));
+  floor.rotation.x = -Math.PI / 2; floor.position.y = -0.5; V.scene.add(floor);
+  V.group = new THREE.Group(); V.scene.add(V.group);
+  V.ghost = new THREE.Group(); V.scene.add(V.ghost);
+  const ro = new ResizeObserver(() => resize3D()); ro.observe(host);
+  $('xray').addEventListener('change', () => build3D());
+  $('ghost').addEventListener('change', () => build3D());
+  $('resetView').addEventListener('click', () => fitView());
+  let first = true;
+  const loop = () => {
+    requestAnimationFrame(loop);
+    if (!$('tab-chair').classList.contains('on')) return;
+    V.controls.update(); V.renderer.render(V.scene, V.camera);
+  };
+  loop();
+  V.fitted = false;
+}
+function resize3D() {
+  const host = $('viewer'), w = host.clientWidth, h = host.clientHeight;
+  if (!w || !h) return;
+  V.renderer.setSize(w, h, false); V.camera.aspect = w / h; V.camera.updateProjectionMatrix();
+}
+function fitView() {
+  const I = M.info, H = I.back_top;
+  const c = new THREE.Vector3(0, H * 0.45, (I.zmin + I.zmax) / 2);
+  const dist = Math.max(I.W, I.depth, H) * 2.9;
+  V.camera.position.copy(c).add(new THREE.Vector3(-0.72, 0.42, 0.9).normalize().multiplyScalar(dist));
+  V.controls.target.copy(c); V.controls.update();
+}
+function hexGeom(c) {
+  // c: 8 corners [b0..b3, t0..t3]
+  const f = [[0, 1, 2, 3], [7, 6, 5, 4], [0, 4, 5, 1], [1, 5, 6, 2], [2, 6, 7, 3], [3, 7, 4, 0]];
+  const pos = [];
+  for (const q of f) { for (const t of [[q[0], q[1], q[2]], [q[0], q[2], q[3]]]) for (const i of t) pos.push(...c[i]); }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.computeVertexNormals();
+  return g;
+}
+function seatCorners(MM) { const T = MM.info.T, n = MM.seat_n; return MM.seat_under.concat(MM.seat_under.map(p => [p[0] + n[0] * T, p[1] + n[1] * T, p[2] + n[2] * T])); }
+function backCorners(MM) { return MM.back_side.concat(MM.back_side.map(p => [p[0] + MM.back_w, p[1], p[2]])); }
+function slatGeom(b) { const e = ext(b); const g = new THREE.BoxGeometry(e[0], e[1], e[2]); g.translate((b[0] + b[1]) / 2, (b[2] + b[3]) / 2, (b[4] + b[5]) / 2); return g; }
+function orientCyl(mesh, p0, p1) {
+  const a = new THREE.Vector3(...p0), b = new THREE.Vector3(...p1);
+  mesh.position.copy(a).add(b).multiplyScalar(0.5);
+  mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), b.clone().sub(a).normalize());
+}
+function build3D() {
+  if (!V.group) return;
+  for (const g of [V.group, V.ghost]) while (g.children.length) { const o = g.children.pop(); o.geometry && o.geometry.dispose(); }
+  const xr = $('xray').checked;
+  const mat = (c, o) => new THREE.MeshLambertMaterial(Object.assign({color: c}, xr ? {transparent: true, opacity: o, depthWrite: false} : {}));
+  const black = mat(0x151515, 0.18), yel = mat(0xf3c300, 0.35);
+  for (const s of M.slats) {
+    const la = longAxisOf(s.box), mats = [0, 1, 2, 3, 4, 5].map(i => (i >> 1) === la ? yel : black);
+    V.group.add(new THREE.Mesh(slatGeom(s.box), mats));
+  }
+  V.group.add(new THREE.Mesh(hexGeom(seatCorners(M)), Object.assign(mat(0x1d3c93, 0.35), {side: THREE.DoubleSide})));
+  V.group.add(new THREE.Mesh(hexGeom(backCorners(M)), Object.assign(mat(0xc8171e, 0.35), {side: THREE.DoubleSide})));
+  if (xr) {
+    const wood = new THREE.MeshLambertMaterial({color: 0xd9a55a}), steel = new THREE.MeshLambertMaterial({color: 0x555555});
+    for (const d of M.dowels) {
+      const len = Math.hypot(d.p1[0] - d.p0[0], d.p1[1] - d.p0[1], d.p1[2] - d.p0[2]);
+      const m = new THREE.Mesh(new THREE.CylinderGeometry(M.info.DIA / 2, M.info.DIA / 2, len, 14), d.through !== null ? new THREE.MeshLambertMaterial({color: 0xf3c300}) : wood);
+      orientCyl(m, d.p0, d.p1); V.group.add(m);
+    }
+    for (const s of M.screws) {
+      const a = s.p.map((v, i) => v + s.n[i] * 1), b = s.p.map((v, i) => v - s.n[i] * 40);
+      const m = new THREE.Mesh(new THREE.CylinderGeometry(2.2, 2.2, 41, 10), steel); orientCyl(m, a, b); V.group.add(m);
+    }
+  }
+  const showG = $('ghost').checked;
+  $('ghostkey').style.display = showG ? '' : 'none';
+  if (showG) {
+    const lm = new THREE.LineBasicMaterial({color: 0xe0522c, transparent: true, opacity: 0.85});
+    const add = g => V.ghost.add(new THREE.LineSegments(new THREE.EdgesGeometry(g), lm));
+    for (const s of FIRST.slats) add(slatGeom(s.box));
+    add(hexGeom(seatCorners(FIRST))); add(hexGeom(backCorners(FIRST)));
+  }
+  if (!V.fitted) { fitView(); V.fitted = true; }
+}
+function longAxisOf(b) { const e = ext(b); return e.indexOf(Math.max(...e)); }
+
+// ================= parts / BOM =================
+function partGroups() {
+  const g = {};
+  for (const s of M.slats) {
+    const e = ext(s.box).slice().sort((a, b) => a - b);
+    const o = g[s.key] = g[s.key] || {key: s.key, name: partName(s.key), sec: e[0], sec2: e[1], len: e[2], n: 0};
+    o.n++;
+  }
+  return Object.values(g).sort((a, b) => a.key.localeCompare(b.key));
+}
+function packBars(pieces, stock, kerf) {
+  const bars = [];
+  const sorted = pieces.slice().sort((a, b) => b.len - a.len);
+  for (const p of sorted) {
+    let bar = bars.find(b => b.used + (b.items.length ? kerf : 0) + p.len <= stock + 1e-6);
+    if (!bar) { bar = {used: 0, items: []}; bars.push(bar); }
+    if (bar.items.length) bar.used += kerf;
+    bar.items.push({p, at: bar.used}); bar.used += p.len;
+  }
+  return bars;
+}
+function barsSVG(bars, stock, label) {
+  const W = 760, left = 70, rowH = 34, sc = (W - left - 10) / stock;
+  let s = `<svg viewBox="0 0 ${W} ${bars.length * rowH + 26}" width="100%" style="max-width:${W}px" role="img" aria-label="${esc(label)}">`;
+  bars.forEach((b, i) => {
+    const y = i * rowH + 6;
+    s += `<text x="0" y="${y + 17}" font-size="12">Bar ${i + 1}</text>`;
+    s += `<rect x="${left}" y="${y}" width="${stock * sc}" height="22" fill="#fff" stroke="#000" stroke-dasharray="3 3"/>`;
+    for (const it of b.items) {
+      const x = left + it.at * sc, w = it.p.len * sc;
+      s += `<rect x="${x}" y="${y}" width="${w}" height="22" fill="#111" stroke="#000"/><rect x="${x}" y="${y}" width="3" height="22" fill="#f3c300"/><rect x="${x + w - 3}" y="${y}" width="3" height="22" fill="#f3c300"/>`;
+      if (w > 26) s += `<text x="${x + w / 2}" y="${y + 15}" font-size="11.5" fill="#fff" text-anchor="middle" font-weight="700">${it.p.key}${w > 70 ? ' ' + f0(it.p.len) : ''}</text>`;
+    }
+    s += `<text x="${left + stock * sc}" y="${y + 36 - 2}" font-size="10.5" text-anchor="end" fill="#555">offcut ${f0(stock - b.used)}</text>`;
+  });
+  return s + '</svg>';
+}
+function packSheet(pieces, SW, SH, kerf) {
+  // shelf packing; pieces {w,h,label,poly?}
+  const sheets = [];
+  const items = pieces.map(p => { const long = Math.max(p.w, p.h), short = Math.min(p.w, p.h); return Object.assign({}, p, {W: short, H: long}); })
+    .sort((a, b) => b.H - a.H);
+  const newSheet = () => { const s = {shelves: [], used: 0, items: []}; sheets.push(s); return s; };
+  for (const it of items) {
+    if (it.W > SW || it.H > SH) { if (!(it.H <= SW && it.W <= SH)) { it.nofit = true; continue; } }
+    let placed = false;
+    for (const sh of sheets) {
+      for (const shelf of sh.shelves) {
+        if (shelf.x + it.W <= SW + 1e-6 && it.H <= shelf.h + 1e-6) { sh.items.push(Object.assign({x: shelf.x, y: shelf.y}, it)); shelf.x += it.W + kerf; placed = true; break; }
+      }
+      if (placed) break;
+      if (sh.used + it.H <= SH + 1e-6) { const shelf = {x: it.W + kerf, y: sh.used, h: it.H}; sh.shelves.push(shelf); sh.items.push(Object.assign({x: 0, y: sh.used}, it)); sh.used += it.H + kerf; placed = true; break; }
+    }
+    if (!placed) { const sh = newSheet(); sh.shelves.push({x: it.W + kerf, y: 0, h: it.H}); sh.items.push(Object.assign({x: 0, y: 0}, it)); sh.used = it.H + kerf; }
+  }
+  return {sheets, nofit: items.filter(i => i.nofit)};
+}
+function sheetSVG(sh, SW, SH, i) {
+  const maxH = 380, sc = Math.min(maxH / SH, 300 / SW);
+  let s = `<svg viewBox="-2 -2 ${SW * sc + 4} ${SH * sc + 22}" width="${SW * sc + 4}" role="img" aria-label="Sheet ${i + 1} layout">`;
+  s += `<rect x="0" y="0" width="${SW * sc}" height="${SH * sc}" fill="#fff" stroke="#000" stroke-dasharray="3 3"/>`;
+  for (const it of sh.items) {
+    const col = it.label.startsWith('K') ? '#1d3c93' : '#c8171e';
+    s += `<rect x="${it.x * sc}" y="${it.y * sc}" width="${it.W * sc}" height="${it.H * sc}" fill="${col}" stroke="#000"/>`;
+    s += `<text x="${(it.x + it.W / 2) * sc}" y="${(it.y + it.H / 2) * sc}" fill="#fff" font-size="12" font-weight="800" text-anchor="middle">${it.label}</text>`;
+    s += `<text x="${(it.x + it.W / 2) * sc}" y="${(it.y + it.H / 2) * sc + 14}" fill="#fff" font-size="10" text-anchor="middle">${f0(it.W)}×${f0(it.H)}</text>`;
+  }
+  return s + `<text x="0" y="${SH * sc + 16}" font-size="11.5">Sheet ${i + 1}: ${SW} × ${SH}</text></svg>`;
+}
+const ICON = {
+  dowel: `<svg viewBox="0 0 64 18" width="54" height="16" aria-hidden="true"><rect x="2" y="3" width="44" height="12" rx="2" fill="#f0dcb0" stroke="#000" stroke-width="1.6"/><path d="M10 3v12M18 3v12M26 3v12M34 3v12M42 3v12" stroke="#000" stroke-width=".8"/></svg>`,
+  dowelL: `<svg viewBox="0 0 64 18" width="54" height="16" aria-hidden="true"><rect x="2" y="3" width="60" height="12" rx="2" fill="#f3c300" stroke="#000" stroke-width="1.6"/><path d="M10 3v12M18 3v12M26 3v12M34 3v12M42 3v12M50 3v12M58 3v12" stroke="#000" stroke-width=".8"/></svg>`,
+  screw: `<svg viewBox="0 0 64 18" width="54" height="16" aria-hidden="true"><path d="M3 2 L10 6 L10 12 L3 16 Z" fill="#ccc" stroke="#000" stroke-width="1.5"/><path d="M10 7 H52 L60 9 L52 11 H10" fill="#ccc" stroke="#000" stroke-width="1.5"/><path d="M16 6l3 6M24 6l3 6M32 6l3 6M40 6l3 6M48 6l3 6" stroke="#000" stroke-width=".9"/></svg>`,
+  glue: `<svg viewBox="0 0 30 44" width="22" height="32" aria-hidden="true"><path d="M13 2h4l2 8h-8z" fill="#fff" stroke="#000" stroke-width="1.6"/><rect x="5" y="10" width="20" height="32" rx="3" fill="#fff" stroke="#000" stroke-width="1.8"/><path d="M9 20h12M9 25h12" stroke="#000" stroke-width="1.2"/></svg>`,
+  people: `<svg viewBox="0 0 64 48" width="58" height="44" aria-label="Two people"><g fill="none" stroke="#000" stroke-width="2.2" stroke-linecap="round"><circle cx="18" cy="9" r="6" fill="#fff"/><path d="M18 15v16M18 31l-7 14M18 31l7 14M8 22h20"/><circle cx="46" cy="9" r="6" fill="#fff"/><path d="M46 15v16M46 31l-7 14M46 31l7 14M36 22h20"/></g></svg>`,
+  clamp: `<svg viewBox="0 0 50 50" width="44" height="44" aria-label="Clamp"><g fill="none" stroke="#000" stroke-width="2.4" stroke-linejoin="round"><path d="M8 6h30v8M8 6v38h30v-8"/><path d="M38 14v22" stroke-dasharray="3 3"/><rect x="30" y="16" width="16" height="6" fill="#fff"/><rect x="30" y="28" width="16" height="6" fill="#fff"/></g></svg>`,
+  mallet: `<svg viewBox="0 0 50 50" width="44" height="44" aria-label="Mallet"><g stroke="#000" stroke-width="2.2" fill="#fff"><rect x="8" y="6" width="30" height="14" rx="2"/><path d="M23 20v26" stroke-width="5"/><path d="M23 20v26" stroke="#fff" stroke-width="1.5"/></g></svg>`,
+  square: `<svg viewBox="0 0 50 50" width="44" height="44" aria-label="Measure"><g fill="none" stroke="#000" stroke-width="2.2"><rect x="6" y="6" width="38" height="38" stroke-dasharray="4 3"/><path d="M6 44L44 6M6 6l38 38"/></g></svg>`
+};
+function hardware() {
+  const nt = M.dowels.filter(d => d.through !== null).length;
+  const I = M.info;
+  return [
+    {key: '101', name: `Fluted dowel Ø${I.DIA} × ${I.DLEN}`, n: M.dowels.length - nt, icon: ICON.dowel},
+    {key: '102', name: `Dowel Ø${I.DIA} × ${fh(I.DLEN / 2 + I.S)} (cut from rod, driven through)`, n: nt, icon: ICON.dowelL},
+    {key: '103', name: 'Countersunk wood screw 4 × 40', n: M.screws.length, icon: ICON.screw}
+  ];
+}
+function renderParts() {
+  const C = PARTS_CTRL, nC = C.chairs, I = M.info;
+  const groups = partGroups();
+  const holesOn = key => M.holes.filter(h => h.slat === repIdx(key)).length;
+  let h = `<div class="ctrls noprint">
+    <div class="field"><label for="pc_chairs">Chairs</label><input class="num" type="number" id="pc_chairs" min="1" max="12" value="${nC}"></div>
+    <div class="field"><label for="pc_stock">Stock length</label><input class="num" type="number" id="pc_stock" min="600" step="100" value="${C.stock}"></div>
+    <div class="field"><label for="pc_kerf">Saw kerf</label><input class="num" type="number" id="pc_kerf" min="0" step="0.5" value="${C.kerf}"></div>
+    <div class="field"><label for="pc_allow">Extra per cut</label><input class="num" type="number" id="pc_allow" min="0" step="1" value="${C.allow}"></div>
+    <div class="field"><label for="pc_sw">Sheet width</label><input class="num" type="number" id="pc_sw" min="300" step="10" value="${C.sheetW}"></div>
+    <div class="field"><label for="pc_sh">Sheet length</label><input class="num" type="number" id="pc_sh" min="300" step="10" value="${C.sheetH}"></div>
+    <button class="printbtn" onclick="window.print()">Print this tab</button></div>`;
+
+  h += `<div class="sheet"><div class="head"><h2>Cut list</h2><span class="sub">${nC} chair${nC > 1 ? 's' : ''}. Lengths are finished sizes in mm.</span></div><div class="scroll"><table>
+    <tr><th>Part</th><th>Name</th><th>Section</th><th class="n">Length</th><th class="n">Per chair</th><th class="n">Total</th><th class="n">Holes each</th></tr>`;
+  for (const g of groups) h += `<tr><td><b>${g.key}</b></td><td>${g.name}${g.n === 2 ? ' <span class="sub">(left + right)</span>' : ''}</td><td>${fh(g.sec)} × ${fh(g.sec2)}</td><td class="n">${f0(g.len)}</td><td class="n">${g.n}</td><td class="n"><b>${g.n * nC}</b></td><td class="n">${holesOn(g.key)}</td></tr>`;
+  h += `<tr><td><b>K</b></td><td>Seat board, tapered</td><td>${I.T} ply</td><td class="n">${f0(I.seat_len)}</td><td class="n">1</td><td class="n"><b>${nC}</b></td><td class="n">4</td></tr>
+    <tr><td></td><td colspan="6" class="sub">Width ${f0(I.seat_w_rear)} at the rear edge, ${f0(I.seat_w_front)} at the front edge.</td></tr>
+    <tr><td><b>L</b></td><td>Back board</td><td>${I.T} ply</td><td class="n">${f0(I.back_len)}</td><td class="n">1</td><td class="n"><b>${nC}</b></td><td class="n">4</td></tr>
+    <tr><td></td><td colspan="6" class="sub">Width ${f0(I.back_w)}.</td></tr></table></div></div>`;
+
+  const hw = hardware();
+  h += `<div class="sheet"><div class="head"><h2>Hardware</h2><span class="sub">Totals include about 10% spare.</span></div><div class="scroll"><table>
+    <tr><th></th><th>No.</th><th>Item</th><th class="n">Per chair</th><th class="n">Buy</th></tr>`;
+  for (const x of hw) h += `<tr><td>${x.icon}</td><td><b>${x.key}</b></td><td>${x.name}</td><td class="n">${x.n}</td><td class="n"><b>${Math.ceil(x.n * nC * 1.1)}</b></td></tr>`;
+  h += `<tr><td>${ICON.glue}</td><td></td><td>PVA wood glue (D3 if the chairs may live outside)</td><td class="n"></td><td class="n">1 bottle</td></tr></table></div></div>`;
+
+  // cut plans
+  const S = I.S, pieces = [], arms = [];
+  for (let c = 0; c < nC; c++) for (const g of groups) for (let i = 0; i < g.n; i++) (g.key === 'J' ? arms : pieces).push({key: g.key, len: g.len + C.allow});
+  const tooLong = [...pieces, ...arms].filter(p => p.len > C.stock);
+  h += `<div class="sheet"><div class="head"><h2>Cutting plan</h2><span class="sub">First-fit, longest pieces first, ${C.kerf} mm kerf, ${C.allow} mm extra per piece for squaring the ends.</span></div>`;
+  if (tooLong.length) h += `<p class="msg">Some parts are longer than your stock length (${C.stock} mm). Buy longer stock.</p>`;
+  else {
+    const b1 = packBars(pieces, C.stock, C.kerf), b2 = packBars(arms, C.stock, C.kerf);
+    h += `<h3>${b1.length} × square slat ${fh(S)} × ${fh(S)} × ${C.stock}</h3>${barsSVG(b1, C.stock, 'Slat cutting plan')}`;
+    h += `<h3 style="margin-top:14px">${b2.length} × arm stock ${fh(3 * S)} × ${fh(S)} × ${C.stock}</h3><p class="note">Arms are three slats wide. If you can't buy ${fh(3 * S)} × ${fh(S)}, rip it from wider board or glue three slats together edge to edge.</p>${barsSVG(b2, C.stock, 'Arm cutting plan')}`;
+    const sp = [];
+    for (let c = 0; c < nC; c++) { sp.push({w: I.seat_w_front + 5, h: I.seat_len + 5, label: 'K' + (c + 1)}); sp.push({w: I.back_w + 5, h: I.back_len + 5, label: 'L' + (c + 1)}); }
+    const pk = packSheet(sp, C.sheetW, C.sheetH, C.kerf);
+    h += `<h3 style="margin-top:14px">${pk.sheets.length} × plywood sheet ${C.sheetW} × ${C.sheetH} × ${I.T}</h3>`;
+    if (pk.nofit.length) h += `<p class="msg">The ${pk.nofit.map(p => p.label).join(', ')} board does not fit on this sheet size.</p>`;
+    h += `<div style="display:flex;gap:18px;flex-wrap:wrap">${pk.sheets.map((s, i) => sheetSVG(s, C.sheetW, C.sheetH, i)).join('')}</div>
+      <p class="note">Rectangles include 5 mm to trim. The seat is cut as a taper afterwards: ${f0(I.seat_w_rear)} at the rear, ${f0(I.seat_w_front)} at the front.</p>`;
+    h += `</div><div class="sheet"><div class="head"><h2>Shopping list</h2><span class="sub">For ${nC} chair${nC > 1 ? 's' : ''}</span></div><ul class="tips">
+      <li><b>${b1.length}</b> square slats ${fh(S)} × ${fh(S)} mm, ${C.stock} long. Straight, dry pine or beech.</li>
+      <li><b>${b2.length}</b> boards ${fh(3 * S)} × ${fh(S)} mm, ${C.stock} long, for the arms.</li>
+      <li><b>${pk.sheets.length}</b> sheet${pk.sheets.length > 1 ? 's' : ''} of ${I.T} mm birch plywood, ${C.sheetW} × ${C.sheetH}, or have the store cut the ${nC * 2} rectangles.</li>
+      <li><b>${Math.ceil(hw[0].n * nC * 1.1)}</b> fluted dowels Ø${I.DIA} × ${I.DLEN}, and a 1 m Ø${I.DIA} dowel rod for the ${hw[1].n * nC} long ones.</li>
+      <li><b>${Math.ceil(hw[2].n * nC * 1.1)}</b> countersunk screws 4 × 40.</li>
+      <li>Wood glue, 120 and 180 grit sandpaper, primer, and paint in black, yellow, red and blue.</li>
+      <li>Masking tape and a pencil for labelling every part with its letter.</li></ul>`;
+  }
+  h += `</div><div class="sheet"><div class="head"><h2>Tools</h2></div><ul class="tips">
+    <li>Drill with a Ø${I.DIA} brad-point bit and a depth stop set to ${fh(I.DLEN / 2 + 2)} mm.</li>
+    <li>A doweling jig keeps holes square and centred. Worth it for ${M.dowels.length * 2 * nC} holes.</li>
+    <li>3 mm drill and a countersink bit for the screws.</li>
+    <li>Saw with a mitre box or chop saw, so the slat ends are square.</li>
+    <li>4 clamps, a rubber mallet, a try square and a tape measure.</li>
+    <li>A second person. Steps 3, 4 and 8 are easier with four hands.</li></ul></div>`;
+  $('partsOut').innerHTML = h;
+  const bind = (id, k) => $(id).addEventListener('change', e => { const v = +e.target.value; if (v > 0 || (k === 'kerf' || k === 'allow')) { PARTS_CTRL[k] = v; saveState(); renderParts(); } });
+  bind('pc_chairs', 'chairs'); bind('pc_stock', 'stock'); bind('pc_kerf', 'kerf'); bind('pc_allow', 'allow'); bind('pc_sw', 'sheetW'); bind('pc_sh', 'sheetH');
+}
+
+// ================= drilling drawings =================
+const FACE_ORDER = ['top', 'bottom', 'front', 'back', 'inner', 'outer'];
+const EDGE_NAME = ['inner edge', 'bottom edge', 'back edge'];
+const AX_ARROW = (x1, y1, x2, y2) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#000" stroke-width="1" marker-start="url(#ar)" marker-end="url(#ar)"/>`;
+const DEFS = `<defs><marker id="ar" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 1 L9 5 L0 9 z" fill="#000"/></marker></defs>`;
+
+function holeRows(key) {
+  const rep = repIdx(key);
+  const hs = M.holes.filter(h => h.slat === rep);
+  const side = hs.filter(h => !h.end).sort((a, b) => FACE_ORDER.indexOf(a.face) - FACE_ORDER.indexOf(b.face) || a.along - b.along);
+  const ends = hs.filter(h => h.end);
+  const all = side.concat(ends);
+  all.forEach((h, i) => { h.no = i + 1; const d = M.dowels[h.dowel]; h.joins = M.slats[d.a === h.slat ? d.b : d.a].key; });
+  return {rep, side, ends, all};
+}
+
+function partSVG(key) {
+  const I = M.info, {rep, side, ends} = holeRows(key);
+  const box = M.slats[rep].box, e = ext(box), la = longAxisOf(box), len = e[la];
+  const left = 118, sc = Math.min(600 / len, 1.8), W = 780;
+  const faces = FACE_ORDER.filter(f => side.some(h => h.face === f));
+  let y = 6, s = '';
+  const refEnd = PART_INFO[key].verb;
+  for (const f of faces) {
+    const hs = side.filter(h => h.face === f).sort((a, b) => a.along - b.along);
+    const across = hs[0].across, aExt = e[across], sh = Math.max(aExt * sc, 14);
+    const top = y + 54, bot = top + sh;
+    s += `<text x="0" y="${top + sh / 2 - 2}" font-size="13" font-weight="800">${f[0].toUpperCase() + f.slice(1)} face</text>`;
+    s += `<text x="0" y="${top + sh / 2 + 13}" font-size="10.5" fill="#444">edge at bottom: ${EDGE_NAME[across].replace(' edge', '')}</text>`;
+    s += `<rect x="${left}" y="${top}" width="${len * sc}" height="${sh}" fill="#fff" stroke="#000" stroke-width="1.4"/>`;
+    s += `<line x1="${left}" y1="${bot}" x2="${left + len * sc}" y2="${bot}" stroke="#000" stroke-width="3"/>`;
+    s += `<path d="M${left - 9} ${top - 2} L${left} ${top - 2} L${left} ${top - 11} Z" fill="#000"/><text x="${left - 3}" y="${top - 14}" font-size="10.5" text-anchor="end">0</text>`;
+    let lastX = -99;
+    for (const h of hs) {
+      const cx = left + h.along * sc, cy = bot - h.off * sc, r = Math.max(I.DIA / 2 * sc, 3.2);
+      let tx = cx; if (tx - lastX < 12) tx = lastX + 12; lastX = tx;
+      s += `<path d="M${cx} ${cy - r} L${cx} ${top} L${tx} ${top - 8} L${tx} ${top - 10}" fill="none" stroke="#000" stroke-width=".7" stroke-dasharray="${cy - r > top ? '2 2' : '0'}"/>`;
+      s += `<text transform="translate(${tx + 3.5} ${top - 12}) rotate(-90)" font-size="11" font-weight="600">${fh(h.along)}</text>`;
+      s += h.through
+        ? `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#f3c300" stroke="#000" stroke-width="1.4"/><path d="M${cx - r * .7} ${cy - r * .7}L${cx + r * .7} ${cy + r * .7}M${cx - r * .7} ${cy + r * .7}L${cx + r * .7} ${cy - r * .7}" stroke="#000" stroke-width="1"/>`
+        : `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#fff" stroke="#000" stroke-width="1.6"/><circle cx="${cx}" cy="${cy}" r="1.1" fill="#000"/>`;
+      if (Math.abs(h.off - aExt / 2) > 0.3) {
+        s += `<line x1="${cx + r + 5}" y1="${bot}" x2="${cx + r + 5}" y2="${cy}" stroke="#c8171e" stroke-width="1"/><text x="${cx + r + 8}" y="${(bot + cy) / 2 + 4}" font-size="10.5" fill="#c8171e" font-weight="700">${fh(h.off)}</text>`;
+      }
+      s += `<text x="${cx}" y="${bot + 13}" font-size="9.5" text-anchor="middle" fill="#555">${h.no}</text>`;
+    }
+    y = bot + 18;
+  }
+  // overall length
+  y += 8;
+  s += AX_ARROW(left, y, left + len * sc, y) + `<rect x="${left + len * sc / 2 - 38}" y="${y - 9}" width="76" height="17" fill="#fff"/><text x="${left + len * sc / 2}" y="${y + 4}" font-size="12" font-weight="800" text-anchor="middle">${fh(len)}</text>`;
+  s += `<text x="0" y="${y + 4}" font-size="11">Length, from ${refEnd}</text>`;
+  y += 22;
+  // end views
+  if (ends.length) {
+    let x = left;
+    for (const h of ends) {
+      const ue = e[h.uax], ve = e[h.vax], es = 2.2;
+      const top = y + 18, bot = top + ve * es;
+      s += `<text x="0" y="${top + 12}" font-size="13" font-weight="800">${h.face[0].toUpperCase() + h.face.slice(1)}</text><text x="0" y="${top + 27}" font-size="10.5" fill="#444">looking at the end grain</text>`;
+      s += `<rect x="${x}" y="${top}" width="${ue * es}" height="${ve * es}" fill="#fff" stroke="#000" stroke-width="1.4"/>`;
+      s += `<line x1="${x}" y1="${top}" x2="${x}" y2="${bot}" stroke="#000" stroke-width="3"/><line x1="${x}" y1="${bot}" x2="${x + ue * es}" y2="${bot}" stroke="#000" stroke-width="3"/>`;
+      const cx = x + h.u * es, cy = bot - h.v * es;
+      s += `<circle cx="${cx}" cy="${cy}" r="${I.DIA / 2 * es}" fill="#fff" stroke="#000" stroke-width="1.6"/><circle cx="${cx}" cy="${cy}" r="1.2"/>`;
+      s += `<text x="${x + ue * es + 8}" y="${top + 14}" font-size="11">${fh(h.u)} from ${EDGE_NAME[h.uax]}</text><text x="${x + ue * es + 8}" y="${top + 29}" font-size="11">${fh(h.v)} from ${EDGE_NAME[h.vax]}</text><text x="${x + ue * es + 8}" y="${top + 44}" font-size="10.5" fill="#555">hole ${h.no}</text>`;
+      x += ue * es + 190;
+      y = Math.max(y, bot - 18 + 0);
+    }
+    y += 40;
+  }
+  return `<svg viewBox="0 0 ${W} ${y}" width="100%" style="max-width:${W}px" role="img" aria-label="Drilling drawing for part ${key}">${DEFS}${s}</svg>`;
+}
+
+function partTable(key) {
+  const I = M.info, {all} = holeRows(key), ref = PART_INFO[key].verb;
+  let t = `<table><tr><th class="n">#</th><th>Face</th><th class="n">From ${ref}</th><th>Across</th><th class="n">Depth</th><th>Joins</th></tr>`;
+  for (const h of all) {
+    const pos = h.end ? '' : fh(h.along);
+    const across = h.end ? `${fh(h.u)} from ${EDGE_NAME[h.uax]}, ${fh(h.v)} from ${EDGE_NAME[h.vax]}` : (Math.abs(h.off - ext(M.slats[h.slat].box)[h.across] / 2) > 0.3 ? `<b style="color:#c8171e">${fh(h.off)}</b> from ${EDGE_NAME[h.across]}` : 'centred');
+    t += `<tr><td class="n">${h.no}</td><td>${h.face}</td><td class="n">${pos}</td><td>${across}</td><td class="n">${h.through ? '<b>through</b>' : fh(h.depth)}</td><td>${h.joins}</td></tr>`;
+  }
+  return t + `</table><p class="note">All holes Ø${I.DIA}.</p>`;
+}
+
+function hull(pts) {
+  pts = pts.slice().sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  const cr = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+  const lo = [], up = [];
+  for (const p of pts) { while (lo.length >= 2 && cr(lo[lo.length - 2], lo[lo.length - 1], p) <= 0) lo.pop(); lo.push(p); }
+  for (const p of pts.slice().reverse()) { while (up.length >= 2 && cr(up[up.length - 2], up[up.length - 1], p) <= 0) up.pop(); up.push(p); }
+  return lo.slice(0, -1).concat(up.slice(0, -1));
+}
+
+function mapSVG() {
+  const I = M.info, sc = 0.42, pad = 46;
+  const sideW = I.depth * sc + pad * 2 + 40, H = I.back_top * sc + pad + 40;
+  const gz = z => pad + (z - I.zmin) * sc, gy = y => H - 30 - y * sc;
+  const seatC = seatCorners(M), backC = backCorners(M);
+  let s = '';
+  const poly = (pts, fill) => `<polygon points="${pts.map(p => p.join(',')).join(' ')}" fill="${fill}" stroke="#000" stroke-width="1.3"/>`;
+  s += poly(hull(backC.map(p => [gz(p[2]), gy(p[1])])), '#c8171e');
+  s += poly(hull(seatC.map(p => [gz(p[2]), gy(p[1])])), '#1d3c93');
+  const lab = (x, y, t, c) => `<text x="${x}" y="${y}" font-size="11" font-weight="800" text-anchor="middle" fill="${c || '#000'}">${t}</text>`;
+  const order = ['A', 'E', 'F', 'G', 'H', 'I', 'C', 'D', 'B', 'J'];
+  for (const k of order) for (const sl of M.slats.filter(q => q.key === k && !q.name.endsWith(' L'))) {
+    const b = sl.box, x = gz(b[4]), y = gy(b[3]), w = (b[5] - b[4]) * sc, h = (b[3] - b[2]) * sc;
+    s += `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${'EFGHI'.includes(k) ? '#f3c300' : '#fff'}" stroke="#000" stroke-width="1.3"/>`;
+    s += lab(x + w / 2, y + h / 2 + 4, k);
+  }
+  const bc = backC.map(p => [gz(p[2]), gy(p[1])]);
+  s += lab(bc.reduce((a, p) => a + p[0], 0) / 8 - 16, bc.reduce((a, p) => a + p[1], 0) / 8 - 40, 'L', '#fff');
+  const sc2 = seatC.map(p => [gz(p[2]), gy(p[1])]);
+  s += lab(sc2.reduce((a, p) => a + p[0], 0) / 8, sc2.reduce((a, p) => a + p[1], 0) / 8 - 10, 'K', '#1d3c93');
+  // dims
+  const fy = gy(0);
+  s += `<line x1="${pad - 10}" y1="${fy}" x2="${sideW - 20}" y2="${fy}" stroke="#000" stroke-width="2"/>`;
+  s += AX_ARROW(gz(I.zmin), fy + 16, gz(I.zmax), fy + 16) + `<text x="${(gz(I.zmin) + gz(I.zmax)) / 2}" y="${fy + 12}" font-size="11" text-anchor="middle">${f0(I.depth)}</text>`;
+  s += AX_ARROW(sideW - 26, gy(0), sideW - 26, gy(I.back_top)) + `<text transform="translate(${sideW - 30} ${(gy(0) + gy(I.back_top)) / 2}) rotate(-90)" font-size="11" text-anchor="middle">${f0(I.back_top)}</text>`;
+  const zf = M.seat_under[2][2];
+  s += AX_ARROW(gz(I.zmax) + 12, gy(0), gz(I.zmax) + 12, gy(I.seat_front_top)) + `<text transform="translate(${gz(I.zmax) + 24} ${(gy(0) + gy(I.seat_front_top)) / 2}) rotate(-90)" font-size="11" text-anchor="middle">seat ${f0(I.seat_front_top)}</text>`;
+  s += `<text x="${pad}" y="16" font-size="12.5" font-weight="800">Side view, front to the right</text>`;
+  const side = `<svg viewBox="0 0 ${sideW} ${H + 10}" width="${sideW}" style="max-width:100%;height:auto" role="img" aria-label="Side view with part letters">${DEFS}${s}</svg>`;
+
+  // front view
+  const fw = I.W * sc + pad * 2, gx = x => fw / 2 + x * sc;
+  let f = '';
+  const items = [];
+  for (const sl of M.slats) items.push({z: (sl.box[4] + sl.box[5]) / 2, svg: () => { const b = sl.box; const x = gx(b[0]), y = gy(b[3]), w = (b[1] - b[0]) * sc, h = (b[3] - b[2]) * sc; return `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#fff" stroke="#000" stroke-width="1.2"/>` + (sl.name.endsWith(' L') ? '' : (w > 40 ? lab(x + 14, y + h / 2 + 4, sl.key) : lab(x + w / 2, y + h / 2 + 4, sl.key))); }});
+  items.push({z: -100, svg: () => poly(hull(backC.map(p => [gx(p[0]), gy(p[1])])), '#c8171e')});
+  items.push({z: 150, svg: () => poly(hull(seatC.map(p => [gx(p[0]), gy(p[1])])), '#1d3c93')});
+  items.sort((a, b) => a.z - b.z).forEach(it => { f += it.svg(); });
+  f += `<line x1="10" y1="${fy}" x2="${fw - 10}" y2="${fy}" stroke="#000" stroke-width="2"/>`;
+  f += AX_ARROW(gx(-I.W / 2), fy + 16, gx(I.W / 2), fy + 16) + `<text x="${fw / 2}" y="${fy + 12}" font-size="11" text-anchor="middle">${f0(I.W)}</text>`;
+  f += `<text x="10" y="16" font-size="12.5" font-weight="800">Front view</text>`;
+  const front = `<svg viewBox="0 0 ${fw} ${H + 10}" width="${fw}" style="max-width:100%;height:auto" role="img" aria-label="Front view">${DEFS}${f}</svg>`;
+  return side + front;
+}
+
+function boardSVG(which) {
+  const I = M.info, W = 560;
+  let s = '', h = 0;
+  if (which === 'K') {
+    const L = I.seat_len, wr = I.seat_w_rear, wf = I.seat_w_front, sc = Math.min(360 / L, 380 / wf), cx = W / 2, top = 40;
+    const pts = [[cx - wr / 2 * sc, top], [cx + wr / 2 * sc, top], [cx + wf / 2 * sc, top + L * sc], [cx - wf / 2 * sc, top + L * sc]];
+    s += `<polygon points="${pts.map(p => p.join(',')).join(' ')}" fill="#dfe5f5" stroke="#000" stroke-width="1.6"/>`;
+    s += `<line x1="${cx}" y1="${top - 8}" x2="${cx}" y2="${top + L * sc + 8}" stroke="#000" stroke-dasharray="8 3 2 3" stroke-width=".8"/>`;
+    s += `<text x="${cx}" y="${top - 12}" font-size="11.5" text-anchor="middle">rear edge</text><text x="${cx}" y="${top + L * sc + 22}" font-size="11.5" text-anchor="middle">front edge</text>`;
+    s += AX_ARROW(cx - wr / 2 * sc, top - 26, cx + wr / 2 * sc, top - 26) + `<rect x="${cx - 24}" y="${top - 35}" width="48" height="15" fill="#fff"/><text x="${cx}" y="${top - 23}" font-size="11.5" font-weight="800" text-anchor="middle">${f0(wr)}</text>`;
+    const by = top + L * sc + 38;
+    s += AX_ARROW(cx - wf / 2 * sc, by, cx + wf / 2 * sc, by) + `<rect x="${cx - 24}" y="${by - 9}" width="48" height="15" fill="#fff"/><text x="${cx}" y="${by + 3}" font-size="11.5" font-weight="800" text-anchor="middle">${f0(wf)}</text>`;
+    const lx = cx - wf / 2 * sc - 26;
+    s += AX_ARROW(lx, top, lx, top + L * sc) + `<text transform="translate(${lx - 6} ${top + L * sc / 2}) rotate(-90)" font-size="11.5" font-weight="800" text-anchor="middle">${f0(L)}</text>`;
+    const rows = [...new Set(M.screws.filter(q => q.board === 'K').map(q => q.along.toFixed(2)))].map(Number);
+    const sx = Math.abs(M.screws.find(q => q.board === 'K').x);
+    rows.forEach((a, i) => {
+      const y = top + a * sc;
+      for (const sg of [-1, 1]) s += `<circle cx="${cx + sg * sx * sc}" cy="${y}" r="4.5" fill="#fff" stroke="#000" stroke-width="1.5"/><circle cx="${cx + sg * sx * sc}" cy="${y}" r="1.4"/>`;
+      const rx = cx + wf / 2 * sc + 20 + i * 38;
+      s += AX_ARROW(rx, top, rx, y) + `<text transform="translate(${rx + 12} ${(top + y) / 2}) rotate(-90)" font-size="11" text-anchor="middle">${fh(a)}</text>`;
+      s += `<line x1="${cx + sx * sc + 6}" y1="${y}" x2="${rx + 4}" y2="${y}" stroke="#000" stroke-width=".6" stroke-dasharray="2 2"/>`;
+    });
+    const yy = top + rows[0] * sc - 16;
+    s += AX_ARROW(cx - sx * sc, yy, cx + sx * sc, yy) + `<rect x="${cx - 22}" y="${yy - 8}" width="44" height="14" fill="#dfe5f5"/><text x="${cx}" y="${yy + 4}" font-size="11" text-anchor="middle">${f0(2 * sx)}</text>`;
+    h = by + 20;
+  } else {
+    const L = I.back_len, w = I.back_w, sc = Math.min(430 / L, 360 / w), cx = W / 2, top = 20, bot = top + L * sc;
+    s += `<rect x="${cx - w / 2 * sc}" y="${top}" width="${w * sc}" height="${L * sc}" fill="#f6dcdc" stroke="#000" stroke-width="1.6"/>`;
+    s += `<text x="${cx}" y="${bot + 16}" font-size="11.5" text-anchor="middle">bottom edge</text><text x="${cx}" y="${top + 16}" font-size="11.5" text-anchor="middle">top edge, front face up</text>`;
+    s += AX_ARROW(cx - w / 2 * sc, bot + 30, cx + w / 2 * sc, bot + 30) + `<rect x="${cx - 24}" y="${bot + 21}" width="48" height="15" fill="#fff"/><text x="${cx}" y="${bot + 33}" font-size="11.5" font-weight="800" text-anchor="middle">${f0(w)}</text>`;
+    const lx = cx - w / 2 * sc - 26;
+    s += AX_ARROW(lx, top, lx, bot) + `<text transform="translate(${lx - 6} ${(top + bot) / 2}) rotate(-90)" font-size="11.5" font-weight="800" text-anchor="middle">${f0(L)}</text>`;
+    const rows = [...new Set(M.screws.filter(q => q.board === 'L').map(q => q.along.toFixed(2)))].map(Number);
+    const sx = Math.abs(M.screws.find(q => q.board === 'L').x);
+    rows.forEach((a, i) => {
+      const y = bot - a * sc;
+      for (const sg of [-1, 1]) s += `<circle cx="${cx + sg * sx * sc}" cy="${y}" r="4.5" fill="#fff" stroke="#000" stroke-width="1.5"/><circle cx="${cx + sg * sx * sc}" cy="${y}" r="1.4"/>`;
+      const rx = cx + w / 2 * sc + 20 + i * 38;
+      s += AX_ARROW(rx, bot, rx, y) + `<text transform="translate(${rx + 12} ${(bot + y) / 2}) rotate(-90)" font-size="11" text-anchor="middle">${fh(a)}</text>`;
+      s += `<line x1="${cx + sx * sc + 6}" y1="${y}" x2="${rx + 4}" y2="${y}" stroke="#000" stroke-width=".6" stroke-dasharray="2 2"/>`;
+    });
+    const yy = bot - rows[1] * sc - 16;
+    s += AX_ARROW(cx - sx * sc, yy, cx + sx * sc, yy) + `<rect x="${cx - 22}" y="${yy - 8}" width="44" height="14" fill="#f6dcdc"/><text x="${cx}" y="${yy + 4}" font-size="11" text-anchor="middle">${f0(2 * sx)}</text>`;
+    h = bot + 48;
+  }
+  return `<svg viewBox="0 0 ${W} ${h}" width="100%" style="max-width:${W}px" role="img" aria-label="Board drawing ${which}">${DEFS}${s}</svg>`;
+}
+
+function renderDrill() {
+  const I = M.info;
+  let h = `<div class="ctrls noprint"><button class="printbtn" onclick="window.print()">Print this tab</button></div>`;
+  h += `<div class="sheet"><div class="head"><h2>How to read these drawings</h2><span class="sub">All sizes in mm.</span></div>
+    <div class="scroll" style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-end">${mapSVG()}</div>
+    <ul class="tips" style="margin-top:14px">
+      <li>Label every piece with its letter first. Pairs get L and R, as seen standing in front of the chair. Left and right parts use the same numbers: they are mirror images, and <i>inner</i> always means the face towards the seat.</li>
+      <li>Each strip is one face of the slat, drawn as if you are looking straight at it. The black triangle is the reference end; every number above the strip is measured from it.</li>
+      <li>The thick line along a strip is the reference edge. Holes are centred on the face unless a red number says how far they are from that edge.</li>
+      <li>Blind holes are ${fh(I.DLEN / 2 + 2)} deep (dowel ${I.DLEN} plus glue room). Set a depth stop.</li>
+      <li>Yellow holes with a cross go right through the runner, drilled from the top face where the rail sits. The long ${fh(I.DLEN / 2 + I.S)} mm dowels are driven up through them in step 5.</li>
+      <li>Drill one test joint in an offcut. The dowel should go in with firm hand pressure, not a hammer.</li>
+    </ul></div>`;
+  for (const key of 'ABCDEFGHIJ') {
+    const g = M.slats.filter(s => s.key === key), e = ext(g[0].box).slice().sort((a, b) => a - b);
+    h += `<div class="sheet"><div class="head"><div><span class="tag">${key}</span><h3 style="display:inline">${partName(key)}</h3></div>
+      <span class="sub">${g.length === 2 ? 'Make 2, one L and one R. ' : 'Make 1. '}${fh(e[0])} × ${fh(e[1])} × ${f0(e[2])}${'EFGHI'.includes(key) ? '. Symmetric: measure from either end.' : ''}</span></div>
+      <div class="scroll">${partSVG(key)}</div><div class="scroll">${partTable(key)}</div></div>`;
+  }
+  h += `<div class="grid2"><div class="sheet"><div class="head"><div><span class="tag k">K</span><h3 style="display:inline">Seat board</h3></div><span class="sub">${I.T} mm ply, top face shown</span></div>${boardSVG('K')}
+      <p class="note">Four 3 mm pilot holes, countersunk from the top. The rear pair lands on rail H, the front pair on rail F. Drill on into the rail during assembly.</p></div>
+    <div class="sheet"><div class="head"><div><span class="tag l">L</span><h3 style="display:inline">Back board</h3></div><span class="sub">${I.T} mm ply, front face shown</span></div>${boardSVG('L')}
+      <p class="note">Four 3 mm pilot holes, countersunk from the front face and drilled square to the board. The lower pair lands on rail G, the upper pair on rail I.</p></div></div>`;
+  $('drillOut').innerHTML = h;
+}
+
+// ================= assembly manual (IKEA-style line art) =================
+const AW = 1000, AH = 700;
+let AR = null;
+function initAsm() {
+  if (AR !== null) return AR;
+  try {
+    const r = new THREE.WebGLRenderer({antialias: true, preserveDrawingBuffer: true});
+    r.setPixelRatio(1); r.setClearColor(0xffffff, 1);
+    const scene = new THREE.Scene();
+    scene.add(new THREE.HemisphereLight(0xffffff, 0xa9a9a9, 0.78));
+    const dl = new THREE.DirectionalLight(0xffffff, 0.32); scene.add(dl);
+    const cam = new THREE.OrthographicCamera(-1, 1, 1, -1, 1, 60000);
+    const group = new THREE.Group(); scene.add(group);
+    AR = {r, scene, cam, dl, group};
+  } catch (e) { AR = false; }
+  return AR;
+}
+const V3 = a => new THREE.Vector3(a[0], a[1], a[2]);
+const vadd = (a, b, s = 1) => [a[0] + b[0] * s, a[1] + b[1] * s, a[2] + b[2] * s];
+const vlen = a => Math.hypot(a[0], a[1], a[2]);
+const vnorm = a => { const l = vlen(a) || 1; return [a[0] / l, a[1] / l, a[2] / l]; };
+const vdot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+function boxCorners(b) {
+  return [[b[0], b[2], b[4]], [b[1], b[2], b[4]], [b[1], b[2], b[5]], [b[0], b[2], b[5]],
+          [b[0], b[3], b[4]], [b[1], b[3], b[4]], [b[1], b[3], b[5]], [b[0], b[3], b[5]]];
+}
+const HEX_EDGES = [[0, 1], [1, 2], [2, 3], [3, 0], [4, 5], [5, 6], [6, 7], [7, 4], [0, 4], [1, 5], [2, 6], [3, 7]];
+const segMat = (a, b, r) => {
+  const A = V3(a), B = V3(b), d = B.clone().sub(A), L = d.length() || 1e-6;
+  return new THREE.Matrix4().compose(A.clone().add(B).multiplyScalar(0.5),
+    new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), d.normalize()), new THREE.Vector3(r, L, r));
+};
+
+// spec: {view, up?, solids:[{c:8 corners, off, fill, box?}], cyls:[{p0,p1,r,fill}], dashes:[{a,b,col}], arrows:[{a,b}], w,h}
+function asmRender(spec) {
+  const R = initAsm(); if (!R) return '';
+  const w = spec.w || AW, h = spec.h || AH;
+  R.r.setSize(w, h, false);
+  const d = vnorm(spec.view), up0 = spec.up || [0, 1, 0];
+  const fw = d.map(v => -v);
+  const right = vnorm([fw[1] * up0[2] - fw[2] * up0[1], fw[2] * up0[0] - fw[0] * up0[2], fw[0] * up0[1] - fw[1] * up0[0]]);
+  const up = [right[1] * fw[2] - right[2] * fw[1], right[2] * fw[0] - right[0] * fw[2], right[0] * fw[1] - right[1] * fw[0]];
+  const pts = [];
+  for (const s of spec.solids) for (const c of s.c) pts.push(vadd(c, s.off || [0, 0, 0]));
+  for (const c of spec.cyls || []) pts.push(c.p0, c.p1);
+  for (const q of (spec.dashes || []).concat(spec.arrows || [])) pts.push(q.a, q.b);
+  let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9, zc = 0;
+  for (const p of pts) { const x = vdot(p, right), y = vdot(p, up); x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); zc += vdot(p, d); }
+  zc /= pts.length || 1;
+  let ww = (x1 - x0) * 1.1 + 20, hh = (y1 - y0) * 1.1 + 20;
+  if (spec.fixW && spec.fixW > ww) ww = spec.fixW;
+  if (ww / hh > w / h) hh = ww * h / w; else ww = hh * w / h;
+  const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2, px = ww / w;
+  const center = vadd(vadd([0, 0, 0], right, cx), up, cy);
+  const cam = R.cam;
+  cam.left = -ww / 2; cam.right = ww / 2; cam.top = hh / 2; cam.bottom = -hh / 2;
+  cam.position.copy(V3(vadd(vadd(center, d, zc), d, 20000))); cam.up.copy(V3(up));
+  cam.lookAt(V3(vadd(center, d, zc))); cam.updateProjectionMatrix();
+  R.dl.position.copy(V3(vadd(vadd(d, right, -0.5), up, 0.9)));
+
+  const G = R.group, disp = [];
+  const own = o => { G.add(o); disp.push(o); return o; };
+  const matCache = {};
+  const faceMat = col => matCache[col] || (matCache[col] = new THREE.MeshLambertMaterial({color: col, emissive: col === 0xffffff ? 0x333333 : 0x0c0c0c, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 2, polygonOffsetUnits: 3}));
+  const lr = 1.45 * px;
+  const segs = {};
+  const pushSeg = (a, b, r, col) => (segs[col + '|' + r] = segs[col + '|' + r] || {col, r, list: []}).list.push([a, b]);
+  for (const s of spec.solids) {
+    const c = s.c.map(p => vadd(p, s.off || [0, 0, 0]));
+    const g = s.box ? slatGeom([c[0][0], c[6][0], c[0][1], c[6][1], c[0][2], c[6][2]]) : hexGeom(c);
+    own(new THREE.Mesh(g, faceMat(s.fill || 0xffffff)));
+    for (const [i, j] of HEX_EDGES) {
+      const dir = vnorm([c[j][0] - c[i][0], c[j][1] - c[i][1], c[j][2] - c[i][2]]);
+      pushSeg(vadd(c[i], dir, -lr * 0.8), vadd(c[j], dir, lr * 0.8), lr, 0x000000);
+    }
+  }
+  const cylG = new THREE.CylinderGeometry(1, 1, 1, 7, 1, false);
+  for (const c of spec.cyls || []) {
+    const dir = vnorm([c.p1[0] - c.p0[0], c.p1[1] - c.p0[1], c.p1[2] - c.p0[2]]);
+    const m = own(new THREE.Mesh(new THREE.CylinderGeometry(1, 1, 1, 18), new THREE.MeshLambertMaterial({color: c.fill})));
+    m.applyMatrix4(segMat(c.p0, c.p1, c.r));
+    const o = own(new THREE.Mesh(new THREE.CylinderGeometry(1, 1, 1, 18), new THREE.MeshBasicMaterial({color: 0, side: THREE.BackSide})));
+    o.applyMatrix4(segMat(vadd(c.p0, dir, -2.2 * px), vadd(c.p1, dir, 2.2 * px), c.r + 2.2 * px));
+    if (c.head) {
+      const hd = own(new THREE.Mesh(new THREE.ConeGeometry(c.r * 2.1, c.r * 2, 18), new THREE.MeshLambertMaterial({color: c.fill})));
+      hd.position.copy(V3(vadd(c.p0, dir, c.r))); hd.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), V3(dir));
+    }
+  }
+  for (const q of spec.dashes || []) {
+    const L = vlen([q.b[0] - q.a[0], q.b[1] - q.a[1], q.b[2] - q.a[2]]), dir = vnorm([q.b[0] - q.a[0], q.b[1] - q.a[1], q.b[2] - q.a[2]]);
+    const dash = (q.dash || 11) * px, gap = (q.gap || 8) * px, rr = (q.r || 1.05) * px;
+    for (let t = 0; t < L; t += dash + gap) pushSeg(vadd(q.a, dir, t), vadd(q.a, dir, Math.min(L, t + dash)), rr, q.col || 0x000000);
+  }
+  for (const q of spec.arrows || []) {
+    const dir = vnorm([q.b[0] - q.a[0], q.b[1] - q.a[1], q.b[2] - q.a[2]]), hl = 30 * px;
+    const L = vlen([q.b[0] - q.a[0], q.b[1] - q.a[1], q.b[2] - q.a[2]]);
+    const base = vadd(q.b, dir, -hl);
+    for (let t = 0; t < L - hl; t += 20 * px) pushSeg(vadd(q.a, dir, t), vadd(q.a, dir, Math.min(L - hl, t + 12 * px)), 2.4 * px, 0x000000);
+    const cone = own(new THREE.Mesh(new THREE.ConeGeometry(11 * px, hl, 20), new THREE.MeshBasicMaterial({color: 0})));
+    cone.position.copy(V3(vadd(base, dir, hl / 2))); cone.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), V3(dir));
+  }
+  for (const k in segs) {
+    const S = segs[k], im = own(new THREE.InstancedMesh(cylG, new THREE.MeshBasicMaterial({color: S.col}), S.list.length));
+    S.list.forEach((s, i) => im.setMatrixAt(i, segMat(s[0], s[1], S.r)));
+    im.instanceMatrix.needsUpdate = true;
+  }
+  R.r.render(R.scene, cam);
+  const url = R.r.domElement.toDataURL('image/png');
+  for (const o of disp) { G.remove(o); o.geometry && o.geometry !== cylG && o.geometry.dispose(); o.material && o.material.dispose && o.material.dispose(); }
+  cylG.dispose();
+  return url;
+}
+
+// ---------- step definitions ----------
+const byKey = (key, side) => M.slats.map((s, i) => i).filter(i => M.slats[i].key === key && (!side || M.slats[i].name.endsWith(' ' + side)));
+const inBox = (p, b, t = 0.6) => p[0] >= b[0] - t && p[0] <= b[1] + t && p[1] >= b[2] - t && p[1] <= b[3] + t && p[2] >= b[4] - t && p[2] <= b[5] + t;
+const boxCen = b => [(b[0] + b[1]) / 2, (b[2] + b[3]) / 2, (b[4] + b[5]) / 2];
+
+function asmPlan() {
+  const I = M.info, S = I.S, Dm = I.DLEN + 2.4 * S;
+  const stepOf = {};
+  const put = (n, idxs) => idxs.forEach(i => stepOf[i] = n);
+  put(1, [...'ABCD'].flatMap(k => byKey(k, 'R'))); put(2, [...'ABCD'].flatMap(k => byKey(k, 'L')));
+  put(3, [...byKey('F'), ...byKey('H')]); put(4, [...byKey('E'), ...byKey('G')]); put(6, byKey('I')); put(7, byKey('J'));
+  const dStep = M.dowels.map(d => d.through !== null ? 5 : Math.max(stepOf[d.a], stepOf[d.b]));
+  const moves = {};
+  byKey('B', 'R').concat(byKey('C', 'R'), byKey('D', 'R')).forEach(i => moves[i] = [Dm, 0, 0]);
+  byKey('B', 'L').concat(byKey('C', 'L'), byKey('D', 'L')).forEach(i => moves[i] = [-Dm, 0, 0]);
+  byKey('F').forEach(i => moves[i] = [0, 0, -Dm]); byKey('H').forEach(i => moves[i] = [0, 0, Dm]);
+  byKey('E').forEach(i => moves[i] = [0, 0, -Dm]); byKey('G').forEach(i => moves[i] = [0, 0, -Math.min(Dm, 0.8 * (M.slats[byKey('G')[0]].box[4] - M.slats[byKey('D', 'R')[0]].box[5]))]);
+  byKey('I').forEach(i => moves[i] = [0, 0, -Dm]); byKey('J').forEach(i => moves[i] = [0, Dm * 1.2, 0]);
+  return {stepOf, dStep, moves};
+}
+
+function stepSpec(n, plan) {
+  const I = M.info, S = I.S, {stepOf, dStep, moves} = plan;
+  const spec = {solids: [], cyls: [], dashes: [], arrows: []};
+  const GREY = 0xbdbdba, WHITE = 0xffffff;
+  const shown = i => (n === 1 ? stepOf[i] === 1 : n === 2 ? stepOf[i] === 2 : stepOf[i] <= Math.min(n, 7) || n >= 8);
+  const isNew = i => stepOf[i] === n && n !== 5;
+  for (let i = 0; i < M.slats.length; i++) {
+    if (!shown(i)) continue;
+    const b = M.slats[i].box, off = isNew(i) && moves[i] ? moves[i] : [0, 0, 0];
+    spec.solids.push({c: boxCorners(b), box: true, off, fill: isNew(i) || n === 8 || n >= 11 ? WHITE : GREY});
+    if (isNew(i) && moves[i]) {
+      const v = moves[i], vh = vnorm(v), cen = vadd(boxCen(b), v);
+      const half = Math.max(...boxCorners(b).map(p => vdot(vadd(p, boxCen(b), -1), vh)));
+      const L = vlen(v) * 0.9;
+      spec.arrows.push({a: vadd(cen, vh, half + L + 20), b: vadd(cen, vh, half + 14)});
+    }
+  }
+  const seatC = seatCorners(M), backC = backCorners(M);
+  const seatOff = M.seat_n.map(v => v * 170), up = [0, Math.cos(I.lean * Math.PI / 180), -Math.sin(I.lean * Math.PI / 180)];
+  const backOff = up.map(v => v * Math.min(320, I.back_len * 0.36));
+  if (n >= 9) spec.solids.push({c: seatC, off: n === 9 ? seatOff : [0, 0, 0], fill: n === 9 || n >= 11 ? WHITE : GREY});
+  if (n >= 10) spec.solids.push({c: backC, off: n === 10 ? backOff : [0, 0, 0], fill: WHITE});
+  // dowels
+  const DIAr = I.DIA / 2;
+  M.dowels.forEach((d, di) => {
+    if (dStep[di] !== n || n > 7) return;
+    if (n === 5) {
+      const v = [0, -(I.DLEN + 3 * S), 0];
+      const lo = d.p0[1] < d.p1[1] ? d.p0 : d.p1, hi = lo === d.p0 ? d.p1 : d.p0;
+      spec.cyls.push({p0: vadd(lo, v), p1: vadd(hi, v), r: DIAr, fill: 0xf3c300});
+      spec.dashes.push({a: vadd(hi, v, 1), b: lo});
+      spec.arrows.push({a: vadd(lo, v, 1.35), b: vadd(lo, v, 1.08)});
+      return;
+    }
+    spec.cyls.push({p0: d.p0, p1: d.p1, r: DIAr, fill: 0xf0dcb0});
+    const mv = [d.a, d.b].find(i => isNew(i) && moves[i]);
+    if (mv === undefined) return;
+    const v = moves[mv], tip = inBox(d.p1, M.slats[mv].box) ? d.p1 : d.p0;
+    spec.dashes.push({a: tip, b: vadd(tip, v)});
+  });
+  if (n === 8) {
+    const bl = M.slats[byKey('B', 'L')[0]].box, br = M.slats[byKey('B', 'R')[0]].box, dlb = M.slats[byKey('D', 'L')[0]].box, drb = M.slats[byKey('D', 'R')[0]].box;
+    const y = M.slats[byKey('E')[0]].box[3] + 0.5 * S;
+    const d1 = [[bl[0], y, bl[5]], [drb[1], y, drb[4]]], d2 = [[br[1], y, br[5]], [dlb[0], y, dlb[4]]];
+    for (const q of [d1, d2]) spec.dashes.push({a: q[0], b: q[1], col: 0xc8171e, r: 2.2, dash: 16, gap: 9});
+    const yf = bl[3] - 0.5 * S, yb = 0.5 * S;
+    spec.dashes.push({a: [bl[0], yb, bl[5]], b: [br[1], yf, br[5]], col: 0x1d3c93, r: 2.2, dash: 16, gap: 9});
+    spec.dashes.push({a: [br[1], yb, br[5]], b: [bl[0], yf, bl[5]], col: 0x1d3c93, r: 2.2, dash: 16, gap: 9});
+  }
+  const screwCyl = (s, off, gapN) => {
+    const top = vadd(vadd(s.p, off), s.n, gapN), bot = vadd(top, s.n, -40);
+    spec.cyls.push({p0: top, p1: bot, r: 3, fill: 0x9a9a9a, head: true});
+    spec.dashes.push({a: bot, b: vadd(s.p, off)});
+  };
+  if (n === 9) M.screws.filter(s => s.board === 'K').forEach(s => screwCyl(s, seatOff, 90));
+  if (n === 10) M.screws.filter(s => s.board === 'L').forEach(s => screwCyl(s, backOff, 90));
+  if (n === 9) { const c = vadd(seatC[0].map((v, i) => (v + seatC[2][i]) / 2), M.seat_n, I.T); spec.arrows.push({a: vadd(vadd(c, seatOff), M.seat_n, 190), b: vadd(vadd(c, seatOff), M.seat_n, 40)}); }
+  if (n === 10) { const tp = backC[2].map((v, i) => (v + backC[7][i]) / 2); spec.arrows.push({a: vadd(vadd(tp, backOff), up, 200), b: vadd(vadd(tp, backOff), up, 30)}); }
+  const VIEWS = {1: [1.5, .8, 1], 2: [-1.5, .8, 1], 3: [-1.4, .9, .4], 4: [-1.2, .9, -.9], 5: [-1, -.8, 1.1], 6: [-1, .9, -1.1],
+    7: [-1, 1.2, 1], 8: [-1.2, 1.25, 1], 9: [-1.2, 1.1, 1], 10: [-1.3, .8, 1], 11: [-1.25, .75, 1]};
+  spec.view = VIEWS[n];
+  return spec;
+}
+
+function thumbSpec(key) {
+  let c, box = true;
+  if (key === 'K') { c = seatCorners(M); box = false; }
+  else if (key === 'L') { c = backCorners(M); box = false; }
+  else c = boxCorners(M.slats[repIdx(key)].box);
+  const la = box ? longAxisOf(M.slats[repIdx(key)].box) : -1;
+  let view = [.9, .7, 1], up = [0, 1, 0];
+  if (la === 0) view = [.25, .55, 1];
+  else if (la === 2) view = [1, .55, .25];
+  else if (la === 1) { view = [.45, .3, 1]; up = [-1, 0, 0]; }
+  if (key === 'K') view = [.6, 1, .5];
+  if (key === 'L') { view = [.5, .7, 1]; }
+  const fixW = box ? Math.max(...M.slats.map(s => Math.max(...ext(s.box)))) * 1.08 : 0;
+  return {view, up, fixW, solids: [{c, box, fill: 0xffffff}], w: 450, h: 300};
+}
+
+// ---------- render tab ----------
+let buildJob = 0;
+const STEP_TXT = {
+  1: ['Right side frame', 'Lay runner A on the bench. Glue the holes, tap the dowels into the runner, then press front leg B, mid post C and rear post D onto its outer face. Check each post is square to the runner.'],
+  2: ['Left side frame', 'Same again, mirrored. The posts go on the outside of the runner, so the two frames are a left and a right, not two copies.'],
+  3: ['Front and seat rails', 'Stand both frames up. Rail F goes behind the front legs, rail H in front of the mid posts. One person holds each side while the rails go in.'],
+  4: ['Low rails', 'Rails E and G sit on top of the runners. Slide E forward onto the front legs and G forward onto the mid posts.'],
+  5: ['Lock the low rails', 'Turn the chair over. Glue the through holes and drive the long dowels up through the runners into E and G. Trim flush once the glue is dry.'],
+  6: ['Top rear rail', 'Rail I goes behind the rear posts, at the same height as the tops of the posts.'],
+  7: ['Arms', 'Set the arms on top of the mid and rear posts. Each arm overhangs its posts by one slat on the inside and the outside.'],
+  8: ['Clamp and square', 'Clamp across the frame. Measure both red diagonals and both blue diagonals; each pair should match within 2 mm. Adjust the clamps until they do, check the chair stands on four feet, then let the glue cure overnight.'],
+  9: ['Seat', 'Lay seat K on rails F and H, the wide end at the front, centred side to side. Drill the pilot holes on into the rails and fit four screws.'],
+  10: ['Back', 'Slide back L down between the arms until it rests on rails G and I. Centre it, drill on through the pilot holes, and fit four screws.']
+};
+const STEP_ICONS = {1: 'glue', 2: 'glue', 3: 'glue people', 4: 'glue people', 5: 'glue mallet', 6: 'glue', 7: 'glue', 8: 'clamp square people', 9: '', 10: ''};
+
+function renderBuild() {
+  const job = ++buildJob, I = M.info;
+  const out = $('buildOut');
+  if (!initAsm()) { out.innerHTML = '<div class="empty">This browser could not start WebGL, so the assembly pictures cannot be drawn here. The Parts and Drilling tabs still work.</div>'; return; }
+  const plan = asmPlan();
+  const hw = hardware();
+  let h = `<div class="ctrls noprint"><button class="printbtn" onclick="window.print()">Print this tab</button></div>`;
+  h += `<div class="sheet"><div class="head"><h2>Before you start</h2><span class="sub">One chair. Do everything twice for the pair.</span></div>
+    <ul class="tips">
+      <li><b>Dry-fit the whole chair first,</b> with dowels but no glue. Mark every joint with a pencil letter pair (B–A, F–B and so on) so it goes back the same way.</li>
+      <li><b>Paint before you glue.</b> Frame black, slat ends yellow, seat blue, back red. Keep paint off the faces that get glued and out of the holes: mask them with tape or push a spare dowel in each hole while you paint.</li>
+      <li><b>Paint the yellow ends last,</b> after the black is dry, with a strip of tape round the slat as a crisp edge.</li>
+      <li><b>Glue sparingly.</b> A thin coat in the hole and on the dowel. Wipe squeeze-out straight away with a damp cloth, since glue blocks paint touch-ups.</li>
+      <li><b>Left and right</b> are as seen standing in front of the chair, looking at it.</li>
+      <li>You can work through steps 1 to 7 in one session. PVA stays workable for about 10 minutes, so have everything laid out before you open the glue.</li>
+    </ul></div>`;
+  h += `<div class="sheet"><div class="head"><h2>In the box</h2><span class="sub">Per chair</span></div><div class="inv">`;
+  for (const key of 'ABCDEFGHIJKL') {
+    let dims, cnt;
+    if (key === 'K') { dims = `${f0(I.seat_len)} × ${f0(I.seat_w_front)}/${f0(I.seat_w_rear)} × ${I.T}`; cnt = 1; }
+    else if (key === 'L') { dims = `${f0(I.back_len)} × ${f0(I.back_w)} × ${I.T}`; cnt = 1; }
+    else { const g = M.slats.filter(s => s.key === key), e = ext(g[0].box).slice().sort((a, b) => b - a); dims = `${f0(e[0])} × ${fh(e[1])} × ${fh(e[2])}`; cnt = g.length; }
+    h += `<div class="p"><span>${key}<em style="font-style:normal">×${cnt}</em></span><img data-thumb="${key}" alt="Part ${key}"><small>${partName(key)}<br>${dims}</small></div>`;
+  }
+  for (const x of hw) h += `<div class="p"><span>${x.key}<em style="font-style:normal">×${x.n}</em></span><div style="display:grid;place-items:center;aspect-ratio:3/2">${x.icon.replace(/width="\d+" height="\d+"/, 'width="110" height="32"')}</div><small>${esc(x.name)}</small></div>`;
+  h += `</div></div><div class="steps">`;
+  for (let n = 1; n <= 10; n++) {
+    const parts = {};
+    M.slats.forEach((s, i) => { if (plan.stepOf[i] === n) parts[s.key] = (parts[s.key] || 0) + 1; });
+    if (n === 9) parts.K = 1; if (n === 10) parts.L = 1;
+    const kit = Object.entries(parts).map(([k, c]) => `<div class="it"><b>${k}</b>×${c}</div>`);
+    const nb = plan.dStep.filter((s, i) => s === n && M.dowels[i].through === null).length, nt = plan.dStep.filter(s => s === n).length - nb;
+    if (nb) kit.push(`<div class="it">${ICON.dowel}<b>101 ×${nb}</b></div>`);
+    if (nt) kit.push(`<div class="it">${ICON.dowelL}<b>102 ×${nt}</b></div>`);
+    if (n >= 9) kit.push(`<div class="it">${ICON.screw}<b>103 ×${M.screws.filter(s => s.board === (n === 9 ? 'K' : 'L')).length}</b></div>`);
+    const ic = STEP_ICONS[n].split(' ').filter(Boolean).map(k => ICON[k]).join('');
+    h += `<div class="step"><div class="snum">${n}</div><div class="kit">${kit.join('')}</div>
+      <img data-step="${n}" alt="Step ${n}: ${esc(STEP_TXT[n][0])}"><div class="icons">${ic}</div>
+      <div class="cap"><b>${STEP_TXT[n][0]}.</b> ${STEP_TXT[n][1]}</div></div>`;
+  }
+  h += `<div class="step"><div class="snum">✓</div><div class="kit"></div><img data-step="11" alt="Finished chair">
+    <div class="cap"><b>Done.</b> Fill any screw heads you want hidden, touch up the paint, and wait a day before sitting in it. Then build the second one.</div></div></div>`;
+  out.innerHTML = h;
+  const jobs = [];
+  out.querySelectorAll('img[data-thumb]').forEach(img => jobs.push(() => { img.src = asmRender(thumbSpec(img.dataset.thumb)); }));
+  out.querySelectorAll('img[data-step]').forEach(img => jobs.push(() => { img.src = asmRender(stepSpec(+img.dataset.step, plan)); }));
+  const next = () => {
+    if (job !== buildJob || !jobs.length) return;
+    try { jobs.shift()(); } catch (e) { console.error(e); }
+    setTimeout(next, 0);
+  };
+  next();
+}
+
+// ================= glue =================
+function saveState() {
+  try { localStorage.setItem('rietveld-state', JSON.stringify(st)); localStorage.setItem('rietveld-parts', JSON.stringify(PARTS_CTRL)); } catch (e) {}
+}
+let version = 0;
+const rendered = {parts: -1, drill: -1, build: -1};
+let tabTimer = null;
+const activeTab = () => (document.querySelector('nav.tabs button[aria-selected="true"]') || {dataset: {tab: 'chair'}}).dataset.tab;
+function renderTab(t) {
+  if (t === 'chair' || rendered[t] === version) return;
+  rendered[t] = version;
+  if (t === 'parts') renderParts(); else if (t === 'drill') renderDrill(); else if (t === 'build') renderBuild();
+}
+function changed() {
+  try { M = buildChair(toModel(st)); } catch (e) { console.error(e); return; }
+  version++;
+  syncUI(); readout(); build3D(); saveState();
+  clearTimeout(tabTimer);
+  const t = activeTab();
+  tabTimer = setTimeout(() => renderTab(t), t === 'build' ? 350 : 120);
+}
+document.querySelectorAll('nav.tabs button').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('nav.tabs button').forEach(x => x.setAttribute('aria-selected', x === b ? 'true' : 'false'));
+  document.querySelectorAll('section.tab').forEach(s => s.classList.toggle('on', s.id === 'tab-' + b.dataset.tab));
+  if (b.dataset.tab === 'chair') resize3D(); else renderTab(b.dataset.tab);
+}));
+window.addEventListener('beforeprint', () => renderTab(activeTab()));
+
+M = buildChair(toModel(st));
+syncUI(); readout();
+try { init3D(); resize3D(); build3D(); } catch (e) { $('viewer').insertAdjacentHTML('afterbegin', '<div class="empty">3D view needs WebGL, which this browser could not start.</div>'); }
+
+</script>
+</body>
+</html>
